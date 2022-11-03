@@ -1,7 +1,9 @@
-part of 'login_bloc.dart';
+part of 'sign_up_bloc.dart';
 
 @immutable
-class LoginState {
+class SignUpState {
+  final String username;
+  bool get isValidUsername => username.length > 3;
   final String email;
   bool get isValidEmail => email.length > 3;
   final String password;
@@ -9,19 +11,22 @@ class LoginState {
 
   final FormSubmissionStatus formStatus;
 
-  const LoginState({
+  const SignUpState({
+    this.username = "",
     this.email = "",
     this.password = "",
     this.formStatus = const InitialFormStatus(),
   });
 
-  LoginState copyWith({
+  SignUpState copyWith({
+    String? username,
     String? email,
     String? password,
     FormSubmissionStatus? formStatus,
   }) {
-    print(email.toString());
-    return LoginState(
+    print(username.toString());
+    return SignUpState(
+        username: username ?? this.username,
         email: email ?? this.email,
         password: password ?? this.password,
         formStatus: formStatus ?? this.formStatus);
