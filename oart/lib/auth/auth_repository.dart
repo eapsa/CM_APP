@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class AuthRepository {
   Future<int> load() async {
-    print("LoadLoaddddddddddddddddddddddddddddd");
+    // get user from local db
+    // return id
     await Future.delayed(const Duration(seconds: 10));
     throw Exception("not signed in");
     //return 0;
@@ -12,9 +13,10 @@ class AuthRepository {
     required String email,
     required String password,
   }) async {
-    print("attempting login");
+    // get user from api
+    // write user to local db
+    // return id
     await Future.delayed(const Duration(seconds: 3));
-    print("logged in");
     return 0;
   }
 
@@ -23,13 +25,15 @@ class AuthRepository {
     required String email,
     required String password,
   }) async {
-    print("attempting signup");
+    // post user top api
+    // write user to local db
+    // return id
     await Future.delayed(const Duration(seconds: 3));
-    print("signup");
     return 0;
   }
 
   Future<void> signOut() async {
+    // remove db local
     await Future.delayed(const Duration(seconds: 3));
   }
 }
