@@ -97,10 +97,80 @@ class APIService {
 
     if (response.statusCode == 200) {
       return List.generate(maps.length, (i) {
-        return Workout.fromMapLocal(maps[i]);
+        return Workout.fromMapAPI(maps[i]);
       });
     } else {
       throw Exception('Failed to get workout list.');
+    }
+  }
+
+  Future<List<Image>> getWorkoutImages(int workoutId) async {
+    final response = await http.get(
+      Uri.parse('$url/workouts/images?workout_id=$workoutId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    List<Map<String, dynamic>> maps = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return List.generate(maps.length, (i) {
+        return Image.fromMapAPI(maps[i]);
+      });
+    } else {
+      throw Exception('Failed to get images list.');
+    }
+  }
+
+  Future<List<Coordinate>> getWorkoutCoordinates(int workoutId) async {
+    final response = await http.get(
+      Uri.parse('$url/workouts/coords?workout_id=$workoutId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    List<Map<String, dynamic>> maps = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return List.generate(maps.length, (i) {
+        return Coordinate.fromMapAPI(maps[i]);
+      });
+    } else {
+      throw Exception('Failed to get coordinates list.');
+    }
+  }
+
+  Future<Friend> postFriend(int userId, int friendId) async {
+    final response = await http.post(
+      Uri.parse('$url/friends?user_id=$userId&friend_id=$friendId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return Friend.fromMapAPIVersion1(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to register friend.');
+    }
+  }
+
+  Future<List<Friend>> getFriends(int userId) async {
+    final response = await http.get(
+      Uri.parse('$url/friends?user_id=$userId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    List<Map<String, dynamic>> maps = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return List.generate(maps.length, (i) {
+        return Friend.fromMapAPIVersion2(maps[i]);
+      });
+    } else {
+      throw Exception('Failed to get friends.');
     }
   }
 }
