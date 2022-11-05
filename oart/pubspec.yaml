@@ -41,8 +41,14 @@ dependencies:
   path:
   path_provider:
   http:
-  image_picker: ^0.8.6
   network_info_plus: ^3.0.1
+  google_maps_flutter: ^2.2.1
+  location:
+  stop_watch_timer:
+  image_picker:
+  vector_math:
+  shared_preferences:
+  flutter_tts:
 
 dev_dependencies:
   flutter_test:

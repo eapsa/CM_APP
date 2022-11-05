@@ -37,15 +37,9 @@ class _MapViewState extends State<MapView> {
   bool mapRun = false;
   Workout workout = Workout();
   FlutterTts flutterTts = FlutterTts();
-  int targetDist = 50;
-
-  Map<String, String> traductions = {
-    "en": "",
-    "pt": "",
-    "fr": "",
-    "es": "",
-    "de": "",
-  };
+  double targetDist = 1.0;
+  String minuteDisplayTime = "";
+  String secondDisplayTime = "";
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -53,6 +47,18 @@ class _MapViewState extends State<MapView> {
       location.enableBackgroundMode(enable: true);
       print(l);
       if (mapRun) {
+        Map<String, String> sentences = {
+          "en":
+              'distance: $targetDist kilometers, time: $minuteDisplayTime minutes and $secondDisplayTime seconds',
+          "pt":
+              'distância: $targetDist quilómetros, tempo: $minuteDisplayTime minutos e $secondDisplayTime  segundos',
+          "fr":
+              'distance : $targetDist kilomètres, temps : $minuteDisplayTime minutes et $secondDisplayTime  secondes',
+          "de":
+              'Entfernung: $targetDist Kilometers, Zeit: $minuteDisplayTime Minuten und $secondDisplayTime  Sekunden',
+          "es":
+              'distancia: $targetDist kilómetros, tiempo: $minuteDisplayTime minutos y $secondDisplayTime  segundos'
+        };
         polylineCoordinates.add(LatLng(l.latitude!, l.longitude!));
         _addPolyLine();
         print("distance");
@@ -63,11 +69,12 @@ class _MapViewState extends State<MapView> {
           workout.distance += calculateDistance(
               last.latitude, last.longitude, l.latitude!, l.longitude!);
           print("viva");
-          if (workout.distance > targetDist) {
+          if ((workout.distance / 1000) > targetDist) {
             await flutterTts
                 .setLanguage(await SharedPreferencesHelper.getLanguage());
-            await flutterTts.speak("Target: $targetDist");
-            targetDist += 50;
+            await flutterTts
+                .speak(sentences[await SharedPreferencesHelper.getLanguage()]!);
+            targetDist += 1;
           }
         }
         Future.delayed(const Duration(seconds: 3));
@@ -204,8 +211,8 @@ class _MapViewState extends State<MapView> {
       initialData: 0,
       builder: (context, snap) {
         final value = snap.data;
-        final minuteDisplayTime = StopWatchTimer.getDisplayTimeMinute(value!);
-        final secondDisplayTime = StopWatchTimer.getDisplayTimeSecond(value);
+        minuteDisplayTime = StopWatchTimer.getDisplayTimeMinute(value!);
+        secondDisplayTime = StopWatchTimer.getDisplayTimeSecond(value);
         workout.time = value;
         return Expanded(
             child: Column(
