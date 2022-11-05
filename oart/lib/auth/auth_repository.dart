@@ -1,23 +1,37 @@
-import 'package:flutter/material.dart';
+import 'package:oart/storage_services/api_service.dart';
+import 'package:oart/storage_services/database.dart';
+
+import '../data_types/all.dart';
 
 class AuthRepository {
   Future<int> load() async {
-    // get user from local db
-    // return id
-    await Future.delayed(const Duration(seconds: 10));
-    throw Exception("not signed in");
-    //return 0;
+    DatabaseService db = DatabaseService();
+    List<User> user = await db.getUsers();
+
+    if (user.isEmpty) {
+      throw Exception("not signed in");
+    }
+
+    return user[0].id;
   }
 
   Future<int> login({
     required String email,
     required String password,
   }) async {
-    // get user from api
-    // write user to local db
-    // return id
-    await Future.delayed(const Duration(seconds: 3));
-    return 0;
+    APIService api = APIService();
+    User user = await api.getUserByCredentials(email, password);
+
+    DatabaseService db = DatabaseService();
+    User dbUser = User.fromMapLocal({
+      'id': user.id,
+      'name': user.name,
+      'email': user.email,
+      'password': password
+    });
+    await db.createUser(dbUser);
+
+    return user.id;
   }
 
   Future<int> signUp({
@@ -25,15 +39,22 @@ class AuthRepository {
     required String email,
     required String password,
   }) async {
-    // post user top api
-    // write user to local db
-    // return id
-    await Future.delayed(const Duration(seconds: 3));
-    return 0;
+    APIService api = APIService();
+    User user = await api.postUser(username, email, password);
+
+    DatabaseService db = DatabaseService();
+    User dbUser = User.fromMapLocal({
+      'id': user.id,
+      'name': user.name,
+      'email': user.email,
+      'password': password
+    });
+    await db.createUser(dbUser);
+    return user.id;
   }
 
   Future<void> signOut() async {
-    // remove db local
-    await Future.delayed(const Duration(seconds: 3));
+    DatabaseService db = DatabaseService();
+    await db.deleteTables();
   }
 }
