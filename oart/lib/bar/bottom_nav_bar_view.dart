@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oart/bar/bottom_nav_bar_cubit.dart';
+import 'package:oart/feed/feed_navigator.dart';
 import 'package:oart/feed/feed_view.dart';
 import 'package:oart/loading_view.dart';
 import 'package:oart/map/map_navigator.dart';
@@ -21,7 +22,7 @@ class BottomNavBarView extends StatelessWidget {
           index: state,
           children: [
             MapNavigator(),
-            FeedView(),
+            FeedNavigator(),
             ProfileView(),
           ],
         ),

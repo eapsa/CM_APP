@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:oart/feed/feed_cubit.dart';
+import 'package:oart/feed/feed_navigator_cubit.dart';
+import 'package:oart/feed/feed_detail_view.dart';
+import 'package:oart/feed/feed_qrcode_view.dart';
 import 'package:oart/feed/feed_view.dart';
 
-class AuthNavigator extends StatelessWidget {
-  const AuthNavigator({super.key});
+class FeedNavigator extends StatelessWidget {
+  const FeedNavigator({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FeedCubit, FeedState>(builder: (context, state) {
+    return BlocBuilder<FeedNavigatorCubit, FeedNavigatorState>(
+        builder: (context, state) {
       return Navigator(
         pages: [
-          if (state == FeedState.view) const MaterialPage(child: FeedView()),
+          const MaterialPage(child: FeedView()),
+          if (state == FeedNavigatorState.detail)
+            const MaterialPage(child: FeedDetailView()),
+          if (state == FeedNavigatorState.qrcode)
+            const MaterialPage(child: QrCodeView()),
         ],
-        onPopPage: ((route, result) => route.didPop(result)),
+        onPopPage: (route, result) {
+          context.read<FeedNavigatorCubit>().showView();
+          return route.didPop(result);
+        },
       );
     });
   }

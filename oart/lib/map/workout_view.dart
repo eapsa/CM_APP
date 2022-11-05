@@ -91,6 +91,7 @@ class WorkoutView extends StatelessWidget {
       onPressed: () {
         if (_formKey.currentState!.validate()) {
           context.read<MapBloc>().add(MapEndEvent(workout: workout));
+          Navigator.pop(context);
         }
       },
       child: const Text("Save workout"),

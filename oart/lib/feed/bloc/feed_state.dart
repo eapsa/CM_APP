@@ -1,4 +1,15 @@
 part of 'feed_bloc.dart';
 
 @immutable
-class FeedState {}
+abstract class FeedState {}
+
+class FeedInitialState extends FeedState {}
+
+class FeedLoadingState extends FeedState {}
+
+class FeedLoadSucessState extends FeedState {
+  final List<Workout> workoutsList;
+  FeedLoadSucessState({required this.workoutsList});
+}
+
+class FeedLoadErrorState extends FeedState {}
