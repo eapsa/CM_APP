@@ -305,11 +305,13 @@ class _MapViewState extends State<MapView> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
       onPressed: () {
         print(workout.time);
+        workout.speed = calculateSpeed();
         _stopWatchTimer.onResetTimer();
         mapRun = false;
-        context.read<MapBloc>().add(MapInitialEvent());
         polylineCoordinates.clear();
         _addPolyLine();
+        BlocProvider.of<MapNavigatorCubit>(context).showWorkout(workout);
+        context.read<MapBloc>().add(MapInitialEvent());
         workout = Workout();
       },
       child: const Text("Terminate"),
@@ -388,5 +390,10 @@ class _MapViewState extends State<MapView> {
             cos(lat1) * cos(lat2) * pow(sin(lon2 - lon1) / 2, 2)));
 
     return distance;
+  }
+
+  double calculateSpeed() {
+    if (workout.distance == 0) return 0;
+    return ((workout.time! / 1000) / 60) / (workout.distance / 1000);
   }
 }

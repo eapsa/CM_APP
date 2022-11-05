@@ -16,4 +16,7 @@ class MapStopEvent extends MapEvent {}
 
 class MapResetEvent extends MapEvent {}
 
-class MapEndEvent extends MapEvent {}
+class MapEndEvent extends MapEvent {
+  final Workout workout;
+  MapEndEvent({required this.workout});
+}

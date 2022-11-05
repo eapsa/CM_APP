@@ -4,6 +4,7 @@ import 'package:oart/loading_view.dart';
 import 'package:oart/map/map_navigator_cubit.dart';
 import 'package:oart/map/map_view.dart';
 import 'package:oart/map/settings_view.dart';
+import 'package:oart/map/workout_view.dart';
 
 class MapNavigator extends StatelessWidget {
   const MapNavigator({super.key});
@@ -17,6 +18,8 @@ class MapNavigator extends StatelessWidget {
           MaterialPage(child: MapView()),
           if (state == MapNavigatorState.photo)
             MaterialPage(child: SettingsView()),
+          if (state == MapNavigatorState.workout)
+            MaterialPage(child: WorkoutView()),
         ],
         onPopPage: (route, result) {
           context.read<MapNavigatorCubit>().showMap();
