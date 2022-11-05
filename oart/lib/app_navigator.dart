@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oart/auth/auth_cubit.dart';
 import 'package:oart/auth/auth_navigator.dart';
+import 'package:oart/bar/bottom_nav_bar_view.dart';
 import 'package:oart/loading_view.dart';
 import 'package:oart/session_cubic.dart';
 import 'package:oart/session_state.dart';
@@ -21,7 +22,8 @@ class AppNavigator extends StatelessWidget {
             const MaterialPage(
               child: AuthNavigator(),
             ),
-          if (state is Authenticated) const MaterialPage(child: SessionView()),
+          if (state is Authenticated)
+            const MaterialPage(child: BottomNavBarView()),
         ],
         onPopPage: ((route, result) => route.didPop(result)),
       );

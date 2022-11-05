@@ -10,6 +10,8 @@ class SessionCubit extends Cubit<SessionState> {
     attemptLoad();
   }
 
+  int get currentUser => (state as Authenticated).user;
+
   void attemptLoad() async {
     try {
       final userId = await authRepo.load();
@@ -21,7 +23,7 @@ class SessionCubit extends Cubit<SessionState> {
 
   void showAuth() => emit(Unauthenticated());
   void showSession(AuthCredentials credentials) {
-    final user = credentials.email;
+    final user = credentials.userId;
     emit(Authenticated(user: user));
   }
 

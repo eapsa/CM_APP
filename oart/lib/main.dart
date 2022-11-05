@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oart/app_navigator.dart';
 import 'package:oart/auth/auth_cubit.dart';
 import 'package:oart/auth/auth_repository.dart';
 import 'package:oart/auth/login/bloc/login_bloc.dart';
 import 'package:oart/auth/sign_up/bloc/sign_up_bloc.dart';
+import 'package:oart/bar/bottom_nav_bar_cubit.dart';
+import 'package:oart/map/bloc/map_bloc.dart';
+import 'package:oart/map/map_navigator_cubit.dart';
 import 'package:oart/session_cubic.dart';
 
 void main() {
@@ -17,6 +21,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return RepositoryProvider(
         create: (context) => AuthRepository(),
         child: MultiBlocProvider(
@@ -38,8 +46,12 @@ class MyApp extends StatelessWidget {
                 context.read<AuthCubit>(),
               ),
             ),
+            BlocProvider(create: (context) => BottomNavBarCubit()),
+            BlocProvider(create: (context) => MapBloc()),
+            BlocProvider(create: (context) => MapNavigatorCubit()),
           ],
           child: const MaterialApp(
+            debugShowCheckedModeBanner: false,
             home: AppNavigator(),
           ),
         ));
