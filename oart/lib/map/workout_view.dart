@@ -27,11 +27,15 @@ class WorkoutView extends StatelessWidget {
   Widget _workout(BuildContext context, Workout workout) {
     return SingleChildScrollView(
         child: Column(children: [
-      _time(workout),
-      _distance(workout),
-      _speed(workout),
-      _forms(context, workout),
       const Padding(padding: EdgeInsets.all(8)),
+      _time(workout),
+      const Padding(padding: EdgeInsets.all(8)),
+      _distance(workout),
+      const Padding(padding: EdgeInsets.all(8)),
+      _speed(workout),
+      const Padding(padding: EdgeInsets.all(8)),
+      _forms(context, workout),
+      const Padding(padding: EdgeInsets.all(16)),
       _saveButton(context, workout),
     ]));
   }
@@ -47,6 +51,7 @@ class WorkoutView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _nameText(workout),
+                const Padding(padding: EdgeInsets.all(8)),
                 _descriptionText(workout),
               ],
             )));
@@ -98,7 +103,7 @@ class WorkoutView extends StatelessWidget {
         Padding(
             padding: const EdgeInsets.all(8),
             child: Text(
-              "${workout.speed.floor()}:${((workout.speed % 1) * 60).floor()}",
+              "${workout.speed.floor().toString().padLeft(2, '0')}:${((workout.speed % 1) * 60).floor().toString().padLeft(2, '0')}",
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 40,
