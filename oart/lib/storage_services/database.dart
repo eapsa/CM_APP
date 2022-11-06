@@ -73,7 +73,7 @@ class DatabaseService {
     }
   }
 
-  Future<User> getUser() async {
+  Future<User?> getUser() async {
     try {
       final Database db = await getDB();
       final List<Map<String, dynamic>> maps = await db.query('User');
@@ -81,7 +81,7 @@ class DatabaseService {
       return User.fromMapLocal(maps[0]);
     } catch (ex) {
       print(ex);
-      throw NullThrownError();
+      return null;
     }
   }
 
@@ -261,9 +261,9 @@ class DatabaseService {
           base64Value += maps[i * 10 + j]['image'];
         }
         images.add(Image.fromMapLocal({
-          'id': -1,
-          'name':
-              maps[i * 10]['name'].substring(1, maps[i * 10]['name'].length),
+          'id': maps[i * 10]['id'],
+          'name': (maps[i * 10]['name'] as String)
+              .substring(1, (maps[i * 10]['name'] as String).length),
           'workout_id': maps[i]['workout_id'],
           'image': base64Value
         }));

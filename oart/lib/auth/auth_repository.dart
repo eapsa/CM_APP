@@ -6,7 +6,9 @@ import '../data_types/all.dart';
 class AuthRepository {
   Future<int> load() async {
     DatabaseService db = DatabaseService();
-    User user = await db.getUser();
+    User? user = await db.getUser();
+
+    if (user == null) throw Exception('User not found');
 
     return user.id;
   }

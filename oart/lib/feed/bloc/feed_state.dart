@@ -1,6 +1,6 @@
 part of 'feed_bloc.dart';
 
-@immutable
+@mat.immutable
 abstract class FeedState {}
 
 class FeedInitialState extends FeedState {}
