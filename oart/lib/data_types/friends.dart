@@ -2,32 +2,27 @@
 
 class Friend {
   final int id;
-  final int user_id;
-  final int friend_id;
+  final String name;
+  final String email;
 
-  Friend(this.id, this.user_id, this.friend_id);
+  Friend(this.id, this.name, this.email);
 
   Friend.fromMapLocal(Map<String, dynamic> item)
       : id = item['id'],
-        user_id = item['user_id'],
-        friend_id = item['friend_id'];
+        name = item['name'],
+        email = item['email'];
 
-  Friend.fromMapAPIVersion1(Map<String, dynamic> item)
+  Friend.fromMapAPI(Map<String, dynamic> item)
       : id = item['id'],
-        user_id = item['user_id'],
-        friend_id = item['friend_id'];
-
-  Friend.fromMapAPIVersion2(Map<String, dynamic> item)
-      : id = -1,
-        user_id = -1,
-        friend_id = item['friend_id'];
+        name = item['name'],
+        email = item['email'];
 
   Map<String, Object> toMap() {
-    return {'id': id, 'user_id': user_id, 'friend_id': friend_id};
+    return {'id': id, 'name': name, 'email': email};
   }
 
   @override
   String toString() {
-    return '(id: $id, user_id: $user_id, friend_id: $friend_id)';
+    return '(id: $id, name: $name, email: $email)';
   }
 }

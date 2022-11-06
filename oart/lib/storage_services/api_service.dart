@@ -170,7 +170,7 @@ class APIService {
     );
 
     if (response.statusCode == 200) {
-      return Friend.fromMapAPIVersion1(jsonDecode(response.body));
+      return Friend.fromMapAPI(jsonDecode(response.body));
     } else {
       throw Exception('Failed to register friend.');
     }
@@ -184,11 +184,20 @@ class APIService {
       },
     );
 
-    List<Map<String, dynamic>> maps = jsonDecode(response.body);
+    String json = response.body;
+    if (json == '[]') return <Friend>[];
+    json = json.substring(1, json.length - 1);
+    json = json.replaceAll(',{', ', {');
+    List<String> coords = json.split(', ');
+    List<Map<String, dynamic>> maps = <Map<String, dynamic>>[];
+
+    for (int i = 0; i < coords.length; i++) {
+      maps.add(jsonDecode(coords[i]));
+    }
 
     if (response.statusCode == 200) {
       return List.generate(maps.length, (i) {
-        return Friend.fromMapAPIVersion2(maps[i]);
+        return Friend.fromMapAPI(maps[i]);
       });
     } else {
       throw Exception('Failed to get friends.');

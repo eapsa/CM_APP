@@ -87,5 +87,16 @@ class FeedRepository {
     }
   }
 
-  Future<void> addFriend(String id, String? friendId) async {}
+  Future<void> addFriend(String id, String? friendId) async {
+    APIService api = APIService();
+    DatabaseService db = DatabaseService();
+    NetworkInfo net = NetworkInfo();
+
+    if (await net.getWifiIP() == null) {
+      throw Exception('Must have an internet connection');
+    }
+
+    Friend friend = await api.postFriend(int.parse(id), int.parse(friendId!));
+    await db.createFriend(friend);
+  }
 }

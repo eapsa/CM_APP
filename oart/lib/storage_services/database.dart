@@ -185,11 +185,6 @@ class DatabaseService {
     try {
       final Database db = await getDB();
       await db.insert('Friends', friend.toMap());
-      await db.insert('Friends', {
-        'id': friend.id + 1,
-        'user_id': friend.friend_id,
-        'friend_id': friend.user_id
-      });
     } catch (e) {
       print(e);
       return;
@@ -197,21 +192,20 @@ class DatabaseService {
   }
 
   // ignore: non_constant_identifier_names
-  Future<List<int>> getFriends(int user_id) async {
+  Future<List<Friend>> getFriends(int user_id) async {
     try {
       final Database db = await getDB();
-      final List<Map<String, dynamic>> maps =
-          await db.query('Friends', where: 'user_id = $user_id');
+      final List<Map<String, dynamic>> maps = await db.query('Friends');
 
       return List.generate(
         maps.length,
         (i) {
-          return Friend.fromMapLocal(maps[i]).friend_id;
+          return Friend.fromMapLocal(maps[i]);
         },
       );
     } catch (ex) {
       print(ex);
-      return <int>[];
+      return <Friend>[];
     }
   }
 
