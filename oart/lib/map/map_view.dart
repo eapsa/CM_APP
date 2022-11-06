@@ -45,7 +45,6 @@ class _MapViewState extends State<MapView> {
     mapController = controller;
     location.onLocationChanged.listen((l) async {
       location.enableBackgroundMode(enable: true);
-      print(l);
       if (mapRun) {
         Map<String, String> sentences = {
           "en":
@@ -61,14 +60,12 @@ class _MapViewState extends State<MapView> {
         };
         polylineCoordinates.add(LatLng(l.latitude!, l.longitude!));
         _addPolyLine();
-        print("distance");
         if (polylineCoordinates.length > 1) {
           LatLng last =
               polylineCoordinates.elementAt(polylineCoordinates.length - 2);
 
           workout.distance += calculateDistance(
               last.latitude, last.longitude, l.latitude!, l.longitude!);
-          print("viva");
           if ((workout.distance / 1000) > targetDist) {
             await flutterTts
                 .setLanguage(await SharedPreferencesHelper.getLanguage());
@@ -99,7 +96,6 @@ class _MapViewState extends State<MapView> {
   Widget build(BuildContext context) {
     final sessionCubit = context.read<SessionCubit>();
     workout.userId = sessionCubit.currentUser;
-    print("workout  ${workout.userId}");
     return Scaffold(
       appBar: _appBar(),
       body: _mapPage(context),
@@ -304,9 +300,7 @@ class _MapViewState extends State<MapView> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
       onPressed: () {
-        print(workout.time);
         workout.coords = polylineCoordinates.toList(growable: false);
-        print('polylines length = ${polylineCoordinates.length}');
         workout.speed = calculateSpeed();
         _stopWatchTimer.onResetTimer();
         mapRun = false;
@@ -370,7 +364,6 @@ class _MapViewState extends State<MapView> {
       } else {
         workout.images?.add(base64encode);
       }
-      print('photo ${workout.images!.length}');
       // setState(() {
       //   this.image = imageTemp;
       // });

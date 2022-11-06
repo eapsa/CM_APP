@@ -143,7 +143,6 @@ class DatabaseService {
         'latitude': coords.latitude,
         'longitude': coords.longitude
       });
-      print('Created Coordinate $coordsId');
     } catch (e) {
       print(e);
       return;
@@ -229,7 +228,6 @@ class DatabaseService {
             9 * (image.image.length / 10).floor(), image.image.length),
       });
       await db.insert('Images', smallImage.toMap());
-      print('Created Image $imageId');
     } catch (e) {
       print(e);
       return;
