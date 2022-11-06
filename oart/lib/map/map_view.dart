@@ -305,6 +305,8 @@ class _MapViewState extends State<MapView> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
       onPressed: () {
         print(workout.time);
+        workout.coords = polylineCoordinates.toList(growable: false);
+        print('polylines length = ${polylineCoordinates.length}');
         workout.speed = calculateSpeed();
         _stopWatchTimer.onResetTimer();
         mapRun = false;

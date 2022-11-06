@@ -55,25 +55,20 @@ class APIService {
   }
 
   Future<Workout> postWorkout(
-      int userId,
-      int time,
-      double distance,
-      double speed,
-      String date,
-      String description,
+      Map<String, dynamic> workout,
       List<Map<String, String>> images,
       List<Map<String, double>> coords) async {
     final response = await http.post(
-      Uri.parse('$url/workouts?user_id=$userId'),
+      Uri.parse('$url/workouts?user_id=${workout['user_id']}'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode({
-        'time': time,
-        'distance': distance,
-        'speed': speed,
-        'date': date,
-        'description': description,
+        'time': workout['time'],
+        'distance': workout['distance'],
+        'speed': workout['speed'],
+        'date': workout['date'],
+        'description': workout['description'],
         'images': images,
         'coords': coords
       }),
@@ -111,8 +106,16 @@ class APIService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-    List<Map<String, dynamic>> maps = jsonDecode(response.body);
+    String json = response.body;
+    if (json == '[]') return <Image>[];
+    json = json.substring(1, json.length - 1);
+    json = json.replaceAll(',{', ', {');
+    List<String> coords = json.split(', ');
+    List<Map<String, dynamic>> maps = <Map<String, dynamic>>[];
 
+    for (int i = 0; i < coords.length; i++) {
+      maps.add(jsonDecode(coords[i]));
+    }
     if (response.statusCode == 200) {
       return List.generate(maps.length, (i) {
         return Image.fromMapAPI(maps[i]);
@@ -129,11 +132,19 @@ class APIService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-    List<Map<String, dynamic>> maps = jsonDecode(response.body);
+    String json = response.body;
+    if (json == '[]') return <Coordinate>[];
+    json = json.substring(1, json.length - 1);
+    json = json.replaceAll(',{', ', {');
+    List<String> coords = json.split(', ');
+    List<Map<String, dynamic>> maps = <Map<String, dynamic>>[];
 
+    for (int i = 0; i < coords.length; i++) {
+      maps.add(jsonDecode(coords[i]));
+    }
     if (response.statusCode == 200) {
       return List.generate(maps.length, (i) {
-        return Coordinate.fromMapAPI(maps[i]);
+        return Coordinate.fromMapAPI(maps[i], workoutId);
       });
     } else {
       throw Exception('Failed to get coordinates list.');

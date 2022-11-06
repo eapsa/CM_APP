@@ -14,9 +14,9 @@ class Coordinate {
         latitude = item['latitude'],
         longitude = item['longitude'];
 
-  Coordinate.fromMapAPI(Map<String, dynamic> item)
+  Coordinate.fromMapAPI(Map<String, dynamic> item, int id)
       : id = -1,
-        workout_id = -1,
+        workout_id = id,
         latitude = item['latitude'],
         longitude = item['longitude'];
 

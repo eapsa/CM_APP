@@ -8,10 +8,10 @@ class Workout {
   final double speed;
   final String date;
   final String description;
-  final bool is_synchronized;
+  final int is_updated;
 
   Workout(this.id, this.user_id, this.time, this.distance, this.speed,
-      this.date, this.description, this.is_synchronized);
+      this.date, this.description, this.is_updated);
 
   Workout.fromMapLocal(Map<String, dynamic> item)
       : id = item['id'],
@@ -21,7 +21,7 @@ class Workout {
         speed = item['speed'],
         date = item['date'],
         description = item['description'],
-        is_synchronized = item['is_synchronized'];
+        is_updated = item['is_updated'];
 
   Workout.fromMapAPI(Map<String, dynamic> item)
       : id = item['id'],
@@ -31,9 +31,9 @@ class Workout {
         speed = item['speed'],
         date = item['date'],
         description = item['description'],
-        is_synchronized = true;
+        is_updated = 1;
 
-  Map<String, Object> toMap() {
+  Map<String, Object> toMapLocal() {
     return {
       'id': id,
       'user_id': user_id,
@@ -42,7 +42,18 @@ class Workout {
       'speed': speed,
       'date': date,
       'description': description,
-      'is_synchronized': is_synchronized
+      'is_updated': is_updated
+    };
+  }
+
+  Map<String, Object> toMapAPI() {
+    return {
+      'user_id': user_id,
+      'time': time,
+      'distance': distance,
+      'speed': speed,
+      'date': date,
+      'description': description,
     };
   }
 
@@ -55,6 +66,6 @@ class Workout {
               speed: $speed,
               date: $date,
               description: $description,
-              is_synchronized: $is_synchronized)''';
+              is_updated: $is_updated)''';
   }
 }

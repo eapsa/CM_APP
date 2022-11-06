@@ -93,7 +93,23 @@ class DatabaseService {
   Future createWorkout(Workout workout) async {
     try {
       final Database db = await getDB();
-      await db.insert('Workout', workout.toMap());
+      await db.insert('Workout', workout.toMapLocal());
+    } catch (e) {
+      print(e);
+      return;
+    }
+  }
+
+  Future updateWorkout(int workoutId, int newId) async {
+    try {
+      final Database db = await getDB();
+      await db.update('Workout', {'id': newId}, where: 'id = $workoutId');
+
+      await db.update('Images', {'workout_id': newId},
+          where: 'workout_id = $workoutId');
+
+      await db.update('Coordinates', {'workout_id': newId},
+          where: 'workout_id = $workoutId');
     } catch (e) {
       print(e);
       return;
@@ -120,7 +136,14 @@ class DatabaseService {
   Future createCoordinates(Coordinate coords) async {
     try {
       final Database db = await getDB();
-      await db.insert('Coordinates', coords.toMap());
+      int? coordsId = await getCoordinatesCount();
+      await db.insert('Coordinates', {
+        'id': coordsId,
+        'workout_id': coords.workout_id,
+        'latitude': coords.latitude,
+        'longitude': coords.longitude
+      });
+      print('Created Coordinate $coordsId');
     } catch (e) {
       print(e);
       return;
@@ -183,7 +206,30 @@ class DatabaseService {
   Future createImage(Image image) async {
     try {
       final Database db = await getDB();
-      await db.insert('Images', image.toMap());
+      Image smallImage;
+
+      String base64 = image.image;
+      int? imageId = await getImagesCount();
+
+      for (int i = 0; i < 9; i++) {
+        smallImage = Image.fromMapLocal({
+          'id': imageId! + i,
+          'workout_id': image.workout_id,
+          'name': '$i${image.name}',
+          'image': image.image.substring(i * (image.image.length / 10).floor(),
+              (i + 1) * (image.image.length / 10).floor()),
+        });
+        await db.insert('Images', smallImage.toMap());
+      }
+      smallImage = Image.fromMapLocal({
+        'id': imageId! + 9,
+        'workout_id': image.workout_id,
+        'name': '9${image.name}',
+        'image': image.image.substring(
+            9 * (image.image.length / 10).floor(), image.image.length),
+      });
+      await db.insert('Images', smallImage.toMap());
+      print('Created Image $imageId');
     } catch (e) {
       print(e);
       return;
@@ -194,15 +240,24 @@ class DatabaseService {
   Future<List<Image>> getImages(int workout_id) async {
     try {
       final Database db = await getDB();
-      final List<Map<String, dynamic>> maps =
-          await db.query('Image', where: 'workout_id = $workout_id');
+      final List<Map<String, dynamic>> maps = await db.query('Images',
+          where: 'workout_id = $workout_id', orderBy: 'id ASC');
 
-      return List.generate(
-        maps.length,
-        (i) {
-          return Image.fromMapLocal(maps[i]);
-        },
-      );
+      List<Image> images = <Image>[];
+      for (int i = 0; i < maps.length / 10; i++) {
+        String base64Value = "";
+        for (int j = 0; j < 10; j++) {
+          base64Value += maps[i * 10 + j]['image'];
+        }
+        images.add(Image.fromMapLocal({
+          'id': -1,
+          'name':
+              maps[i * 10]['name'].substring(1, maps[i * 10]['name'].length),
+          'workout_id': maps[i]['workout_id'],
+          'image': base64Value
+        }));
+      }
+      return images;
     } catch (ex) {
       print(ex);
       return <Image>[];
@@ -221,5 +276,38 @@ class DatabaseService {
       print(e);
       return;
     }
+  }
+
+  Future<int?> getWorkoutCount() async {
+    try {
+      final Database db = await getDB();
+      return Sqflite.firstIntValue(
+          await db.rawQuery('SELECT COUNT(*) FROM Workout;'));
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  Future<int?> getImagesCount() async {
+    try {
+      final Database db = await getDB();
+      return Sqflite.firstIntValue(
+          await db.rawQuery('SELECT COUNT(*) FROM Images;'));
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  Future<int?> getCoordinatesCount() async {
+    try {
+      final Database db = await getDB();
+      return Sqflite.firstIntValue(
+          await db.rawQuery('SELECT COUNT(*) FROM Coordinates;'));
+    } catch (e) {
+      print(e);
+    }
+    return null;
   }
 }
