@@ -45,8 +45,8 @@ class DatabaseService {
         await db.execute('''
           CREATE TABLE Friends (
             id          INTEGER,
-            user_id     INTEGER,
-            friend_id   INTEGER
+            name        TEXT,
+            email       TEXT
           );
           ''');
 
@@ -73,20 +73,15 @@ class DatabaseService {
     }
   }
 
-  Future<List<User>> getUsers() async {
+  Future<User> getUser() async {
     try {
       final Database db = await getDB();
       final List<Map<String, dynamic>> maps = await db.query('User');
 
-      return List.generate(
-        maps.length,
-        (i) {
-          return User.fromMapLocal(maps[i]);
-        },
-      );
+      return User.fromMapLocal(maps[0]);
     } catch (ex) {
       print(ex);
-      return <User>[];
+      throw NullThrownError();
     }
   }
 

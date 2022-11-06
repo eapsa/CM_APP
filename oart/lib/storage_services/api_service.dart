@@ -88,7 +88,17 @@ class APIService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-    List<Map<String, dynamic>> maps = jsonDecode(response.body);
+
+    String json = response.body;
+    if (json == '[]') return <Workout>[];
+    json = json.substring(1, json.length - 1);
+    json = json.replaceAll(',{', ', {');
+    List<String> workouts = json.split(', ');
+    List<Map<String, dynamic>> maps = <Map<String, dynamic>>[];
+
+    for (int i = 0; i < workouts.length; i++) {
+      maps.add(jsonDecode(workouts[i]));
+    }
 
     if (response.statusCode == 200) {
       return List.generate(maps.length, (i) {
@@ -110,11 +120,11 @@ class APIService {
     if (json == '[]') return <Image>[];
     json = json.substring(1, json.length - 1);
     json = json.replaceAll(',{', ', {');
-    List<String> coords = json.split(', ');
+    List<String> images = json.split(', ');
     List<Map<String, dynamic>> maps = <Map<String, dynamic>>[];
 
-    for (int i = 0; i < coords.length; i++) {
-      maps.add(jsonDecode(coords[i]));
+    for (int i = 0; i < images.length; i++) {
+      maps.add(jsonDecode(images[i]));
     }
     if (response.statusCode == 200) {
       return List.generate(maps.length, (i) {

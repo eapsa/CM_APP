@@ -6,13 +6,9 @@ import '../data_types/all.dart';
 class AuthRepository {
   Future<int> load() async {
     DatabaseService db = DatabaseService();
-    List<User> user = await db.getUsers();
+    User user = await db.getUser();
 
-    if (user.isEmpty) {
-      throw Exception("not signed in");
-    }
-
-    return user[0].id;
+    return user.id;
   }
 
   Future<int> login({
