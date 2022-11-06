@@ -56,10 +56,14 @@ class MapRepository {
 
       //TESTING
 
-      // List<Workout> works = await db.getWorkouts();
+      // List<Workout> works = await db.getWorkoutsToSynchronize();
       // for (int i = 0; i < works.length; i++) {
-      //   if (works[i].id == tempWorkoutId)
-      //     print('Before ${works[i].toString()}');
+      //   print('Before1 ${works[i].toString()}');
+      // }
+
+      // List<Workout> worksAll = await db.getWorkouts();
+      // for (int i = 0; i < worksAll.length; i++) {
+      //   print('Before2 ${worksAll[i].toString()}');
       // }
 
       // List<Image> imgs = await db.getImages(tempWorkoutId);

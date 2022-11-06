@@ -56,8 +56,8 @@ class APIService {
 
   Future<Workout> postWorkout(
       Map<String, dynamic> workout,
-      List<Map<String, String>> images,
-      List<Map<String, double>> coords) async {
+      List<Map<String, dynamic>> images,
+      List<Map<String, dynamic>> coords) async {
     final response = await http.post(
       Uri.parse('$url/workouts?user_id=${workout['user_id']}'),
       headers: <String, String>{

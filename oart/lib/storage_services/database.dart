@@ -133,6 +133,24 @@ class DatabaseService {
     }
   }
 
+  Future<List<Workout>> getWorkoutsToSynchronize() async {
+    try {
+      final Database db = await getDB();
+      final List<Map<String, dynamic>> maps =
+          await db.query('Workout', where: 'id < 0');
+
+      return List.generate(
+        maps.length,
+        (i) {
+          return Workout.fromMapLocal(maps[i]);
+        },
+      );
+    } catch (ex) {
+      print(ex);
+      return <Workout>[];
+    }
+  }
+
   Future createCoordinates(Coordinate coords) async {
     try {
       final Database db = await getDB();
