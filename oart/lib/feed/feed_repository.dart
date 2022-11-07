@@ -102,6 +102,11 @@ class FeedRepository {
       throw Exception('Must have an internet connection');
     }
 
+    List<Friend> friends = await db.getFriends(int.parse(id));
+    for (Friend friend in friends) {
+      if (friend.id == int.parse(friendId!)) return;
+    }
+
     Friend friend = await api.postFriend(int.parse(id), int.parse(friendId!));
     await db.createFriend(friend);
   }
