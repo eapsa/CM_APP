@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:oart/data_types/workout.dart';
+import 'package:oart/data_types/all.dart' as data;
 import 'package:oart/feed/feed_navigator_cubit.dart';
 
 class FeedDetailView extends StatefulWidget {
@@ -15,79 +17,109 @@ class _FeedDetailView extends State<FeedDetailView> {
   double deviceHeight(BuildContext context) =>
       MediaQuery.of(context).size.height;
   double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
-  late GoogleMapController mapController;
 
   // created controller to display Google Maps
   late GoogleMapController _controller;
   //on below line we have set the camera position
-  static final CameraPosition _kGoogle = const CameraPosition(
+  final CameraPosition _kGoogle = const CameraPosition(
     target: LatLng(40.636839, -8.657503),
-    zoom: 14,
+    zoom: 17,
   );
 
   final Set<Marker> _markers = {};
   final Set<Polyline> _polyline = {};
-
+  List<Widget> imageSliders = [];
   // list of locations to display polylines
-  List<LatLng> latLen = [
-    LatLng(40.636839, -8.657503),
-    LatLng(40.681987, -8.600407),
-  ];
+  List<LatLng> latLen = [];
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  Widget build(BuildContext context) {
+    final workout = context.read<FeedNavigatorCubit>().workout;
+    final imageList = context.read<FeedNavigatorCubit>().imageList;
+    final coordList = context.read<FeedNavigatorCubit>().coordList;
+    imageSliders = imageList != null
+        ? imageList
+            .map((item) => Container(
+                  child: Container(
+                    margin: const EdgeInsets.all(5.0),
+                    child: ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5.0)),
+                        child: Stack(
+                          children: <Widget>[
+                            Image.memory(
+                              base64.decode(item.image),
+                              fit: BoxFit.cover,
+                              width: 1000.0,
+                            ),
+                          ],
+                        )),
+                  ),
+                ))
+            .toList()
+        : imgList
+            .map((item) => Container(
+                    child: Container(
+                  margin: const EdgeInsets.all(5.0),
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                    child: Container(
+                        decoration: const BoxDecoration(
+                          color: Color.fromARGB(255, 11, 2, 45),
+                        ),
+                        child: Stack(
+                          children: <Widget>[
+                            Image.asset(
+                              item,
+                              fit: BoxFit.cover,
+                              width: 1000.0,
+                            ),
+                          ],
+                        )),
+                  ),
+                )))
+            .toList();
+    for (data.Coordinate coord in coordList) {
+      latLen.add(LatLng(coord.latitude, coord.longitude));
+    }
 
-    // declared for loop for various locations
     for (int i = 0; i < latLen.length; i++) {
-      _markers.add(
-          // added markers
-          Marker(
-        markerId: MarkerId(i.toString()),
-        position: latLen[i],
-        infoWindow: InfoWindow(
-          title: 'HOTEL',
-          snippet: '5 Star Hotel',
-        ),
-        icon: BitmapDescriptor.defaultMarker,
-      ));
-      setState(() {});
       _polyline.add(Polyline(
         polylineId: PolylineId('1'),
         points: latLen,
         color: Colors.green,
       ));
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final workout = context.read<FeedNavigatorCubit>().workout;
     return Scaffold(
       appBar: AppBar(
         title: Text("Workout ${workout.id}"),
       ),
-      body: _feedDetail(workout),
+      body: _feedDetail(workout, imageSliders),
     );
   }
 
-  Widget _feedDetail(Workout workout) {
-    return SingleChildScrollView(
-        //color: Colors.amber,
-        child: Column(children: [
+  Widget _feedDetail(data.Workout workout, List<Widget> imageSliders) {
+    return Column(children: [
       _map(workout),
-      Padding(padding: EdgeInsets.only(bottom: deviceWidth(context) * 0.05)),
-      _name(workout),
-      Padding(padding: EdgeInsets.only(bottom: deviceWidth(context) * 0.05)),
-      Text(workout.description),
-      _status(workout),
-      Padding(padding: EdgeInsets.only(bottom: deviceWidth(context) * 0.05)),
-      _carousel(),
-    ]));
+      Expanded(
+          child: ListView(
+              //color: Colors.amber,
+              children: [
+            Padding(
+                padding: EdgeInsets.only(bottom: deviceWidth(context) * 0.05)),
+            _name(workout),
+            Padding(
+                padding: EdgeInsets.only(bottom: deviceWidth(context) * 0.05)),
+            Text(workout.description),
+            _status(workout),
+            Padding(
+                padding: EdgeInsets.only(bottom: deviceWidth(context) * 0.05)),
+            _carousel(imageSliders),
+          ]))
+    ]);
   }
 
-  Widget _name(Workout workout) {
+  Widget _name(data.Workout workout) {
     return Row(
       children: [
         Padding(padding: EdgeInsets.only(left: deviceWidth(context) * 0.05)),
@@ -104,7 +136,7 @@ class _FeedDetailView extends State<FeedDetailView> {
     );
   }
 
-  Widget _status(Workout workout) {
+  Widget _status(data.Workout workout) {
     return Row(
       children: [
         Expanded(child: _speed(workout)),
@@ -114,7 +146,7 @@ class _FeedDetailView extends State<FeedDetailView> {
     );
   }
 
-  Widget _speed(Workout workout) {
+  Widget _speed(data.Workout workout) {
     return Column(
       children: [
         Padding(
@@ -133,7 +165,7 @@ class _FeedDetailView extends State<FeedDetailView> {
     );
   }
 
-  Widget _distance(Workout workout) {
+  Widget _distance(data.Workout workout) {
     return Column(
       children: [
         Padding(
@@ -152,7 +184,7 @@ class _FeedDetailView extends State<FeedDetailView> {
     );
   }
 
-  Widget _time(Workout workout) {
+  Widget _time(data.Workout workout) {
     return Column(
       children: [
         Padding(
@@ -171,18 +203,10 @@ class _FeedDetailView extends State<FeedDetailView> {
     );
   }
 
-  Widget _map(Workout workout) {
-    late GoogleMapController mapController;
-
-    LatLng center = const LatLng(45.521563, -122.677433);
-
-    void onMapCreated(GoogleMapController controller) {
-      mapController = controller;
-    }
-
+  Widget _map(data.Workout workout) {
     return SizedBox(
       width: deviceWidth(context), // or use fixed size like 200
-      height: deviceHeight(context) * 0.5,
+      height: deviceHeight(context) * 0.35,
       child: Container(
         margin: const EdgeInsets.all(5.0),
         child: ClipRRect(
@@ -196,6 +220,11 @@ class _FeedDetailView extends State<FeedDetailView> {
                   polylines: _polyline,
                   onMapCreated: (GoogleMapController controller) {
                     _controller = controller;
+                    _controller.moveCamera(
+                      CameraUpdate.newCameraPosition(
+                        CameraPosition(target: latLen[0], zoom: 18),
+                      ),
+                    );
                   },
                 ),
               ],
@@ -204,7 +233,7 @@ class _FeedDetailView extends State<FeedDetailView> {
     );
   }
 
-  Widget _carousel() {
+  Widget _carousel(List<Widget> imageSliders) {
     return Container(
         child: CarouselSlider(
       options: CarouselOptions(
@@ -216,26 +245,6 @@ class _FeedDetailView extends State<FeedDetailView> {
       items: imageSliders,
     ));
   }
-
-  final List<Widget> imageSliders = imgList
-      .map((item) => Container(
-            child: Container(
-              margin: const EdgeInsets.all(5.0),
-              child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                  child: Stack(
-                    children: <Widget>[
-                      Image.asset(
-                        item,
-                        fit: BoxFit.cover,
-                        width: 1000.0,
-                        color: Colors.amber,
-                      ),
-                    ],
-                  )),
-            ),
-          ))
-      .toList();
 }
 
 final List<String> imgList = [

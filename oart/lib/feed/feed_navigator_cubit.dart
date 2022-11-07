@@ -8,10 +8,15 @@ class FeedNavigatorCubit extends Cubit<FeedNavigatorState> {
     emit(FeedNavigatorState.view);
   }
   late Workout workout;
+  late List<Image> imageList;
+  late List<Coordinate> coordList;
 
   void showView() => emit(FeedNavigatorState.view);
-  void showDetail(Workout workout) {
+  void showDetail(
+      Workout workout, List<Image> imageList, List<Coordinate> coordList) {
     this.workout = workout;
+    this.imageList = imageList;
+    this.coordList = coordList;
     emit(FeedNavigatorState.detail);
   }
 

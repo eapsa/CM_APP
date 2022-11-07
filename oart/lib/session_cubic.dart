@@ -18,9 +18,7 @@ class SessionCubit extends Cubit<SessionState> {
       final userId = await authRepo.load();
       NetworkInfo net = NetworkInfo();
       String? ip = await net.getWifiIP();
-      print('Boas $ip');
       if (ip != null) {
-        print('Boas Dentro');
         await authRepo.synchronize();
       }
       emit(Authenticated(user: userId));

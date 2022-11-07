@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oart/feed/bloc/feed_bloc.dart';
@@ -55,10 +57,21 @@ class _FeedViewState extends State<FeedView> {
                                 onTap: () {
                                   print("index $index");
                                   BlocProvider.of<FeedNavigatorCubit>(context)
-                                      .showDetail(state.workoutsList[index]);
+                                      .showDetail(
+                                    state.workoutsList[index],
+                                    state.imageList[
+                                        state.workoutsList[index].id]!,
+                                    state.coordList[
+                                        state.workoutsList[index].id]!,
+                                  );
                                 },
-                                child:
-                                    FeedTile(workout: state.workoutsList[index])
+                                child: FeedTile(
+                                  workout: state.workoutsList[index],
+                                  imageList: state
+                                      .imageList[state.workoutsList[index].id],
+                                  coordList: state
+                                      .coordList[state.workoutsList[index].id],
+                                )
                                 // Text(
                                 //     "wawdawd ${state.workoutsList[index].id}"),
                                 );

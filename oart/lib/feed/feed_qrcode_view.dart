@@ -79,6 +79,7 @@ class _QrCodeViewState extends State<QrCodeView> {
       setState(() {
         result = scanData;
         if (result != null) FeedRepository().addFriend(userId, result!.code);
+        controller.dispose();
       });
     });
   }

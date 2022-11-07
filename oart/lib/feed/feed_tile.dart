@@ -1,13 +1,21 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:oart/data_types/workout.dart';
+import 'package:oart/data_types/all.dart' as data;
 
 class FeedTile extends StatefulWidget {
-  const FeedTile({required this.workout, super.key});
-  final Workout workout;
+  FeedTile({
+    required this.workout,
+    this.imageList,
+    this.coordList,
+    super.key,
+  });
+  final data.Workout workout;
+  List<data.Image>? imageList;
+  List<data.Coordinate>? coordList;
   @override
   State<FeedTile> createState() => _FeedTileState();
 }
@@ -59,26 +67,52 @@ class _FeedTileState extends State<FeedTile> {
         color: Colors.green,
       ));
     }
-    imageSliders = imgList
-        .map((item) => Container(
-              child: Container(
-                margin: const EdgeInsets.all(5.0),
-                child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                    child: Stack(
-                      children: <Widget>[
-                        Image.asset(
-                          item,
-                          fit: BoxFit.cover,
-                          width: 1000.0,
-                          color: Colors.amber,
-                        ),
-                      ],
-                    )),
-              ),
-            ))
-        .toList();
-    imageSliders.add(_map(widget.workout));
+    if (widget.imageList == null) {
+      imageSliders = imgList
+          .map(
+            (item) => Container(
+              margin: const EdgeInsets.all(5.0),
+              child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                  child: Container(
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 11, 2, 45),
+                      ),
+                      child: Stack(
+                        children: <Widget>[
+                          Image.asset(
+                            item,
+                            fit: BoxFit.cover,
+                            width: 1000.0,
+                          ),
+                        ],
+                      ))),
+            ),
+          )
+          .toList();
+    } else {
+      imageSliders = widget.imageList!
+          .map((item) => Container(
+                child: Container(
+                  margin: const EdgeInsets.all(5.0),
+                  child: ClipRRect(
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(5.0)),
+                      child: Stack(
+                        children: <Widget>[
+                          Image.memory(
+                            base64.decode(item.image),
+                            fit: BoxFit.cover,
+                            width: 1000.0,
+                            // color: Colors.amber,
+                          ),
+                        ],
+                      )),
+                ),
+              ))
+          .toList();
+    }
+    // imageSliders.add(_map(widget.workout));
   }
 
   @override
@@ -127,7 +161,7 @@ class _FeedTileState extends State<FeedTile> {
         Expanded(
             //width: deviceWidth(context) * 0.4,
             child: Text(
-          "${widget.workout.date.split(' ')[0]} \n ${widget.workout.date.split(' ')[1].split('.')[0]}",
+          "${widget.workout.date.split('T')[0]} \n ${widget.workout.date.split('T')[1].split('.')[0]}",
           textAlign: TextAlign.right,
         )),
         Padding(padding: EdgeInsets.only(right: deviceWidth(context) * 0.05)),
@@ -215,7 +249,7 @@ class _FeedTileState extends State<FeedTile> {
     ));
   }
 
-  Widget _map(Workout workout) {
+  Widget _map(data.Workout workout) {
     return Container(
       child: Container(
         margin: const EdgeInsets.all(5.0),
@@ -225,6 +259,7 @@ class _FeedTileState extends State<FeedTile> {
               children: <Widget>[
                 GoogleMap(
                   initialCameraPosition: _kGoogle,
+                  zoomGesturesEnabled: false,
                   mapType: MapType.normal,
                   markers: _markers,
                   polylines: _polyline,

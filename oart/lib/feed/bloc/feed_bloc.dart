@@ -37,7 +37,11 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
           }
         }
         print('Boas3 $idList3');
-        emit(FeedLoadSucessState(workoutsList: workoutList));
+        emit(FeedLoadSucessState(
+          workoutsList: workoutList,
+          imageList: imageList,
+          coordList: coordList,
+        ));
       } on Exception catch (e) {
         emit(FeedLoadErrorState());
       }
@@ -46,9 +50,20 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
 
   void attemptLoad() async {
     try {
-      final workoutList = await _feedRepository.getWorkouts();
-      emit(FeedLoadSucessState(workoutsList: workoutList));
-    } on Exception {
+      List<Workout> workoutList = await _feedRepository.getWorkouts();
+      List<int> idList = <int>[];
+      for (Workout workout in workoutList) {
+        idList.add(workout.id);
+      }
+      Map<int, List<Image>> imageList = await _feedRepository.getImages(idList);
+      Map<int, List<Coordinate>> coordList =
+          await _feedRepository.getCoordinates(idList);
+      emit(FeedLoadSucessState(
+        workoutsList: workoutList,
+        imageList: imageList,
+        coordList: coordList,
+      ));
+    } on Exception catch (e) {
       emit(FeedLoadErrorState());
     }
   }

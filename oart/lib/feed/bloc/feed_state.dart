@@ -9,7 +9,12 @@ class FeedLoadingState extends FeedState {}
 
 class FeedLoadSucessState extends FeedState {
   final List<Workout> workoutsList;
-  FeedLoadSucessState({required this.workoutsList});
+  final Map<int, List<Image>> imageList;
+  final Map<int, List<Coordinate>> coordList;
+  FeedLoadSucessState(
+      {required this.workoutsList,
+      required this.imageList,
+      required this.coordList});
 }
 
 class FeedLoadErrorState extends FeedState {}

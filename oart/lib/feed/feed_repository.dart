@@ -10,7 +10,9 @@ class FeedRepository {
     NetworkInfo net = NetworkInfo();
 
     if (await net.getWifiIP() == null) {
-      return await db.getWorkouts();
+      List<Workout> workouts = await db.getWorkouts();
+      workouts.sort((a, b) => b.date.compareTo(a.date));
+      return workouts;
     } else {
       User? user = await db.getUser();
 
@@ -18,10 +20,17 @@ class FeedRepository {
       List<Workout> dbWorkouts = await db.getWorkouts();
 
       for (Workout workout in apiWorkouts) {
-        if (dbWorkouts.contains(workout)) continue;
-        await db.createWorkout(workout);
+        for (Workout dbWorkout in dbWorkouts) {
+          print('Boas ${dbWorkout.id} - ${workout.id}');
+          if (dbWorkout.id == workout.id) {
+            print('Boas API');
+            break;
+          }
+          await db.createWorkout(workout);
+        }
+        if (dbWorkouts.isEmpty) await db.createWorkout(workout);
       }
-
+      apiWorkouts.sort((a, b) => b.date.compareTo(a.date));
       return apiWorkouts;
     }
   }
@@ -39,21 +48,20 @@ class FeedRepository {
     if (await net.getWifiIP() == null) {
       return dbImages;
     } else {
-      Map<int, List<Image>> images = {};
       List<Image> apiTemp = <Image>[];
       for (int id in idList) {
-        apiTemp = await api.getWorkoutImages(id);
-
         if (dbImages[id]!.isEmpty) {
+          apiTemp = await api.getWorkoutImages(id);
+
           for (Image image in apiTemp) {
             await db.createImage(image);
           }
-        }
 
-        images[id] = apiTemp;
+          dbImages[id] = apiTemp;
+        }
       }
 
-      return images;
+      return dbImages;
     }
   }
 
@@ -70,20 +78,18 @@ class FeedRepository {
     if (await net.getWifiIP() == null) {
       return dbCoordinates;
     } else {
-      Map<int, List<Coordinate>> coordinates = {};
       List<Coordinate> apiTemp = <Coordinate>[];
       for (int id in idList) {
-        apiTemp = await api.getWorkoutCoordinates(id);
-
         if (dbCoordinates[id]!.isEmpty) {
+          apiTemp = await api.getWorkoutCoordinates(id);
           for (Coordinate coordinate in apiTemp) {
             await db.createCoordinates(coordinate);
           }
+          dbCoordinates[id] = apiTemp;
         }
-        coordinates[id] = apiTemp;
       }
 
-      return coordinates;
+      return dbCoordinates;
     }
   }
 
