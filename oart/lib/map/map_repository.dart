@@ -25,7 +25,7 @@ class MapRepository {
           workout.time!,
           workout.distance,
           workout.speed,
-          date.toString(),
+          date.toString().replaceAll(' ', 'T'),
           workout.description!,
           0);
 

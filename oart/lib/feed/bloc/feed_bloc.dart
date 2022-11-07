@@ -13,12 +13,14 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<FeedPageRequest>((event, emit) async {
       emit(FeedLoadingState());
       try {
+        await _feedRepository.synchronize();
         List<Workout> workoutList = await _feedRepository.getWorkouts();
         List<int> idList = <int>[];
         Set<int> userList = {};
         for (Workout workout in workoutList) {
           idList.add(workout.id);
           userList.add(workout.user_id);
+          print('Boas0 ${workout.date}');
         }
         print('Boas1 $idList');
         Map<int, List<Image>> imageList =
@@ -55,6 +57,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
 
   void attemptLoad() async {
     try {
+      await _feedRepository.synchronize();
       List<Workout> workoutList = await _feedRepository.getWorkouts();
       List<int> idList = <int>[];
       Set<int> userList = {};

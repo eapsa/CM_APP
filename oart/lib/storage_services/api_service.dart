@@ -6,7 +6,7 @@ import '../data_types/all.dart';
 import 'package:http/http.dart' as http;
 
 class APIService {
-  final String url = "http://192.168.1.85:8000";
+  final String url = "http://192.168.1.237:8000";
 
   Future<User> postUser(String name, String email, String password) async {
     final response = await http.post(

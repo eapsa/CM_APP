@@ -138,4 +138,31 @@ class FeedRepository {
     }
     return userNames;
   }
+
+  Future<void> synchronize() async {
+    NetworkInfo net = NetworkInfo();
+
+    if (await net.getWifiIP() == null) {
+      return;
+    }
+    APIService api = APIService();
+    DatabaseService db = DatabaseService();
+
+    List<Workout> workouts = await db.getWorkoutsToSynchronize();
+    List<Map<String, dynamic>> images = <Map<String, dynamic>>[];
+    List<Map<String, dynamic>> coords = <Map<String, dynamic>>[];
+    for (int i = 0; i < workouts.length; i++) {
+      for (Image image in await db.getImages(workouts[i].id)) {
+        images.add(image.toMap());
+      }
+      for (Coordinate coord in await db.getCoordinates(workouts[i].id)) {
+        coords.add(coord.toMap());
+      }
+      Workout workout =
+          await api.postWorkout(workouts[i].toMapAPI(), images, coords);
+
+      await db.updateWorkout(workouts[i].id, workout.id);
+      print('Boas updated workout');
+    }
+  }
 }
