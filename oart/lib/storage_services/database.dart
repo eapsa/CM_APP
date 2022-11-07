@@ -192,7 +192,7 @@ class DatabaseService {
   }
 
   // ignore: non_constant_identifier_names
-  Future<List<Friend>> getFriends(int user_id) async {
+  Future<List<Friend>> getFriends() async {
     try {
       final Database db = await getDB();
       final List<Map<String, dynamic>> maps = await db.query('Friends');

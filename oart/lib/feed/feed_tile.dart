@@ -5,17 +5,20 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:oart/data_types/all.dart' as data;
+import 'package:oart/feed/feed_repository.dart';
 
 class FeedTile extends StatefulWidget {
   FeedTile({
     required this.workout,
     this.imageList,
     this.coordList,
+    this.userName,
     super.key,
   });
   final data.Workout workout;
   List<data.Image>? imageList;
   List<data.Coordinate>? coordList;
+  String? userName;
   @override
   State<FeedTile> createState() => _FeedTileState();
 }
@@ -43,10 +46,9 @@ class _FeedTileState extends State<FeedTile> {
   ];
 
   @override
-  void initState() {
+  initState() {
     // TODO: implement initState
     super.initState();
-
     // declared for loop for various locations
     for (int i = 0; i < latLen.length; i++) {
       _markers.add(
@@ -155,7 +157,7 @@ class _FeedTileState extends State<FeedTile> {
         Padding(padding: EdgeInsets.only(left: deviceWidth(context) * 0.05)),
         Expanded(
             child: Text(
-          "Workout ${widget.workout.id}",
+          "${widget.userName}'s Workout",
           textAlign: TextAlign.left,
         )),
         Expanded(

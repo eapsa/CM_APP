@@ -15,8 +15,10 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       try {
         List<Workout> workoutList = await _feedRepository.getWorkouts();
         List<int> idList = <int>[];
+        Set<int> userList = {};
         for (Workout workout in workoutList) {
           idList.add(workout.id);
+          userList.add(workout.user_id);
         }
         print('Boas1 $idList');
         Map<int, List<Image>> imageList =
@@ -37,10 +39,13 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
           }
         }
         print('Boas3 $idList3');
+        Map<int, String> userNames =
+            await _feedRepository.getUserNames(userList);
         emit(FeedLoadSucessState(
           workoutsList: workoutList,
           imageList: imageList,
           coordList: coordList,
+          userNames: userNames,
         ));
       } on Exception catch (e) {
         emit(FeedLoadErrorState());
@@ -52,16 +57,21 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     try {
       List<Workout> workoutList = await _feedRepository.getWorkouts();
       List<int> idList = <int>[];
+      Set<int> userList = {};
       for (Workout workout in workoutList) {
         idList.add(workout.id);
+        userList.add(workout.user_id);
       }
+      print('Boas4 $userList');
       Map<int, List<Image>> imageList = await _feedRepository.getImages(idList);
       Map<int, List<Coordinate>> coordList =
           await _feedRepository.getCoordinates(idList);
+      Map<int, String> userNames = await _feedRepository.getUserNames(userList);
       emit(FeedLoadSucessState(
         workoutsList: workoutList,
         imageList: imageList,
         coordList: coordList,
+        userNames: userNames,
       ));
     } on Exception catch (e) {
       emit(FeedLoadErrorState());

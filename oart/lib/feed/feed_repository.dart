@@ -18,17 +18,23 @@ class FeedRepository {
 
       List<Workout> apiWorkouts = await api.getWorkouts(user!.id);
       List<Workout> dbWorkouts = await db.getWorkouts();
-
+      bool a = true;
       for (Workout workout in apiWorkouts) {
+        a = true;
         for (Workout dbWorkout in dbWorkouts) {
           print('Boas ${dbWorkout.id} - ${workout.id}');
           if (dbWorkout.id == workout.id) {
             print('Boas API');
+            a = false;
             break;
           }
-          await db.createWorkout(workout);
         }
-        if (dbWorkouts.isEmpty) await db.createWorkout(workout);
+
+        if (dbWorkouts.isEmpty || a) {
+          print('Boas');
+          await db.createWorkout(workout);
+          dbWorkouts.add(workout);
+        }
       }
       apiWorkouts.sort((a, b) => b.date.compareTo(a.date));
       return apiWorkouts;
@@ -99,15 +105,37 @@ class FeedRepository {
     NetworkInfo net = NetworkInfo();
 
     if (await net.getWifiIP() == null) {
-      throw Exception('Must have an internet connection');
+      // throw Exception('Must have an internet connection');
+      return;
     }
 
-    List<Friend> friends = await db.getFriends(int.parse(id));
+    List<Friend> friends = await db.getFriends();
     for (Friend friend in friends) {
       if (friend.id == int.parse(friendId!)) return;
     }
 
     Friend friend = await api.postFriend(int.parse(id), int.parse(friendId!));
     await db.createFriend(friend);
+  }
+
+  Future<Map<int, String>> getUserNames(Set<int> userList) async {
+    DatabaseService db = DatabaseService();
+    Map<int, String> userNames = {};
+
+    User? user = await db.getUser();
+    List<Friend> friends = await db.getFriends();
+
+    for (int id in userList) {
+      print('Boas set');
+      if (user!.id == id) userNames[id] = user.name;
+      for (Friend friend in friends) {
+        print('Boas Friend ${friend.toString()}');
+        if (friend.id == id) userNames[id] = friend.name;
+      }
+    }
+    for (int i = 0; i < userList.length; i++) {
+      print('Boas FeedRepository ${userNames[userList.elementAt(0)]}');
+    }
+    return userNames;
   }
 }

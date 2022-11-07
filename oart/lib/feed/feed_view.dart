@@ -63,6 +63,8 @@ class _FeedViewState extends State<FeedView> {
                                         state.workoutsList[index].id]!,
                                     state.coordList[
                                         state.workoutsList[index].id]!,
+                                    state.userNames[
+                                        state.workoutsList[index].id]!,
                                   );
                                 },
                                 child: FeedTile(
@@ -71,6 +73,8 @@ class _FeedViewState extends State<FeedView> {
                                       .imageList[state.workoutsList[index].id],
                                   coordList: state
                                       .coordList[state.workoutsList[index].id],
+                                  userName: state.userNames[
+                                      state.workoutsList[index].user_id]!,
                                 )
                                 // Text(
                                 //     "wawdawd ${state.workoutsList[index].id}"),

@@ -35,6 +35,11 @@ class AuthRepository {
     });
     await db.createUser(dbUser);
 
+    List<Friend> friends = await api.getFriends(user.id);
+    for (Friend friend in friends) {
+      await db.createFriend(friend);
+    }
+
     return user.id;
   }
 
