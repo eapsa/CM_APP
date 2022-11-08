@@ -8,6 +8,7 @@ import 'package:oart/feed/feed_view.dart';
 import 'package:oart/loading_view.dart';
 import 'package:oart/map/map_navigator.dart';
 import 'package:oart/map/map_view.dart';
+import 'package:oart/profile/profile_navigator.dart';
 import 'package:oart/profile/profile_view.dart';
 import 'package:oart/session_view.dart';
 
@@ -23,7 +24,7 @@ class BottomNavBarView extends StatelessWidget {
           children: [
             MapNavigator(),
             FeedNavigator(),
-            ProfileView(),
+            ProfileNavigator(),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(

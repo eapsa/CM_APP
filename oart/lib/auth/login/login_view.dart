@@ -15,13 +15,13 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         body: Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        _loginForm(context),
-        _showSignUpButton(context),
-      ],
-    ));
+          alignment: Alignment.bottomCenter,
+          children: [
+            _loginForm(context),
+          ],
+        ));
   }
 
   Widget _loginForm(BuildContext context) {
@@ -38,20 +38,34 @@ class LoginView extends StatelessWidget {
                 right: deviceWidth(context) * 0.1),
             child: Form(
                 key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _emailField(context),
-                    _passwordField(context),
-                    _loginButton(context),
-                  ],
-                ))));
+                child: Align(
+                    alignment: Alignment.center,
+                    child: SingleChildScrollView(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.only(
+                                bottom: deviceHeight(context) * 0.05),
+                            child: Image.asset(
+                              'run.png',
+                              width: 200,
+                            )),
+                        _emailField(context),
+                        _passwordField(context),
+                        _loginButton(context),
+                        _showSignUpButton(context),
+                      ],
+                    ))))));
   }
 
   Widget _emailField(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(builder: ((context, state) {
       return TextFormField(
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
+          focusedBorder: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.tertiary)),
           hintText: "Email",
         ),
         validator: ((value) => state.isValidEmail ? null : "Invalid Email"),
@@ -66,7 +80,11 @@ class LoginView extends StatelessWidget {
       return Padding(
           padding: EdgeInsets.only(top: deviceHeight(context) * 0.02),
           child: TextFormField(
-            decoration: const InputDecoration(
+            obscureText: true,
+            decoration: InputDecoration(
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.tertiary)),
               hintText: "Password",
             ),
             validator: ((value) =>

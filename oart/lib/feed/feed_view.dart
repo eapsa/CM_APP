@@ -51,6 +51,7 @@ class _FeedViewState extends State<FeedView> {
                   ? RefreshIndicator(
                       onRefresh: refresh,
                       child: ListView.builder(
+                          addAutomaticKeepAlives: false,
                           itemCount: state.workoutsList.length,
                           itemBuilder: ((context, index) {
                             return GestureDetector(
@@ -64,7 +65,7 @@ class _FeedViewState extends State<FeedView> {
                                     state.coordList[
                                         state.workoutsList[index].id]!,
                                     state.userNames[
-                                        state.workoutsList[index].id]!,
+                                        state.workoutsList[index].user_id]!,
                                   );
                                 },
                                 child: FeedTile(

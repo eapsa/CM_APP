@@ -49,6 +49,7 @@ class _QrCodeViewState extends State<QrCodeView> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           QrImage(
+            backgroundColor: Theme.of(context).colorScheme.tertiary,
             data: userId.toString(),
             version: QrVersions.auto,
             size: 200.0,

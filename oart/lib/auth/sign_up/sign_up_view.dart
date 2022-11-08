@@ -15,13 +15,13 @@ class SignUpView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         body: Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        _signForm(context),
-        _showSignUpButton(context),
-      ],
-    ));
+          alignment: Alignment.bottomCenter,
+          children: [
+            _signForm(context),
+          ],
+        ));
   }
 
   Widget _signForm(BuildContext context) {
@@ -38,15 +38,26 @@ class SignUpView extends StatelessWidget {
                 right: deviceWidth(context) * 0.1),
             child: Form(
                 key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _usernameField(context),
-                    _emailField(context),
-                    _passwordField(context),
-                    _signButton(context),
-                  ],
-                ))));
+                child: Align(
+                    alignment: Alignment.center,
+                    child: SingleChildScrollView(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.only(
+                                bottom: deviceHeight(context) * 0.02),
+                            child: Image.asset(
+                              'run.png',
+                              width: 200,
+                            )),
+                        _usernameField(context),
+                        _emailField(context),
+                        _passwordField(context),
+                        _signButton(context),
+                        _showSignUpButton(context),
+                      ],
+                    ))))));
   }
 
   Widget _usernameField(BuildContext context) {
@@ -54,7 +65,10 @@ class SignUpView extends StatelessWidget {
       return Padding(
           padding: EdgeInsets.only(top: deviceHeight(context) * 0.02),
           child: TextFormField(
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.tertiary)),
               hintText: "Username",
             ),
             validator: ((value) =>
@@ -71,7 +85,10 @@ class SignUpView extends StatelessWidget {
       return Padding(
           padding: EdgeInsets.only(top: deviceHeight(context) * 0.02),
           child: TextFormField(
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.tertiary)),
               hintText: "Email",
             ),
             validator: ((value) => state.isValidEmail ? null : "Invalid Email"),
@@ -87,7 +104,10 @@ class SignUpView extends StatelessWidget {
       return Padding(
           padding: EdgeInsets.only(top: deviceHeight(context) * 0.02),
           child: TextFormField(
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.tertiary)),
               hintText: "Password",
             ),
             validator: ((value) =>

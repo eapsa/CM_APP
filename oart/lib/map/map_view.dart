@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -9,11 +10,13 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
+import 'package:oart/bar/bottom_nav_bar_cubit.dart';
 import 'package:oart/map/bloc/map_bloc.dart';
 import 'package:oart/map/map_navigator_cubit.dart';
 import 'package:oart/map/shared_preferences.dart';
 import 'package:oart/map/workout.dart';
 import 'package:oart/session_cubic.dart';
+import 'package:oart/session_state.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:vector_math/vector_math.dart' as math;
 
@@ -40,11 +43,25 @@ class _MapViewState extends State<MapView> {
   double targetDist = 1.0;
   String minuteDisplayTime = "";
   String secondDisplayTime = "";
+  late StreamSubscription<LocationData> locationSubscription;
+  late String _darkMapStyle;
+
+  Future _loadMapStyles() async {
+    _darkMapStyle = await rootBundle.loadString('assets/map.json');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMapStyles();
+  }
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    location.onLocationChanged.listen((l) async {
+    mapController.setMapStyle(_darkMapStyle);
+    locationSubscription = location.onLocationChanged.listen((l) async {
       location.enableBackgroundMode(enable: true);
+
       if (mapRun) {
         Map<String, String> sentences = {
           "en":
@@ -96,10 +113,19 @@ class _MapViewState extends State<MapView> {
   Widget build(BuildContext context) {
     final sessionCubit = context.read<SessionCubit>();
     workout.userId = sessionCubit.currentUser;
-    return Scaffold(
-      appBar: _appBar(),
-      body: _mapPage(context),
-    );
+
+    return BlocListener<SessionCubit, SessionState>(
+        listener: (context, state) {
+          if (state is Unauthenticated) {
+            print("BOAS123 ${state.toString()}");
+            locationSubscription.cancel();
+          }
+          ;
+        },
+        child: Scaffold(
+          appBar: _appBar(),
+          body: _mapPage(context),
+        ));
   }
 
   AppBar _appBar() {
@@ -155,8 +181,7 @@ class _MapViewState extends State<MapView> {
                 height: deviceHeight(context) * 0.22,
                 width: deviceWidth(context) * 0.8,
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.white),
+                    color: Theme.of(context).colorScheme.primary,
                     borderRadius: const BorderRadius.all(Radius.circular(20))),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -252,7 +277,7 @@ class _MapViewState extends State<MapView> {
                     },
                     child: const Text(
                       "Start",
-                      style: TextStyle(fontSize: 25),
+                      style: TextStyle(fontSize: 20),
                     ),
                   )
                 : (state is MapPauseState)
@@ -286,7 +311,12 @@ class _MapViewState extends State<MapView> {
         mapRun = true;
         context.read<MapBloc>().add(MapStartEvent());
       },
-      child: const Text("Continue"),
+      child: const FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            "Continue",
+            style: TextStyle(fontSize: 19),
+          )),
     );
   }
 
@@ -309,8 +339,14 @@ class _MapViewState extends State<MapView> {
         BlocProvider.of<MapNavigatorCubit>(context).showWorkout(workout);
         context.read<MapBloc>().add(MapInitialEvent());
         workout = Workout();
+        locationSubscription.cancel();
       },
-      child: const Text("Terminate"),
+      child: const FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            "Terminate",
+            style: TextStyle(fontSize: 19),
+          )),
     );
   }
 
@@ -345,7 +381,10 @@ class _MapViewState extends State<MapView> {
         mapRun = false;
         context.read<MapBloc>().add(MapStopEvent());
       },
-      child: const Text("Pause"),
+      child: const Text(
+        "Pause",
+        style: TextStyle(fontSize: 20),
+      ),
     );
   }
 

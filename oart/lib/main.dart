@@ -12,6 +12,7 @@ import 'package:oart/feed/feed_navigator_cubit.dart';
 import 'package:oart/map/bloc/map_bloc.dart';
 import 'package:oart/map/map_navigator_cubit.dart';
 import 'package:oart/map/map_repository.dart';
+import 'package:oart/profile/profile_navigator_cubit.dart';
 import 'package:oart/session_cubic.dart';
 
 void main() {
@@ -59,11 +60,45 @@ class MyApp extends StatelessWidget {
             BlocProvider(create: (context) => MapNavigatorCubit()),
             BlocProvider(create: (context) => FeedNavigatorCubit()),
             BlocProvider(create: (context) => FeedBloc()),
+            BlocProvider(create: (context) => ProfileNavigatorCubit()),
           ],
-          child: const MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: AppNavigator(),
-          ),
+          child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: AppNavigator(),
+              theme: ThemeData(
+                colorScheme: const ColorScheme(
+                  primary: Color.fromARGB(255, 11, 2, 45),
+                  secondary: Color.fromARGB(255, 77, 236, 200),
+                  tertiary: Colors.white,
+                  background: Color.fromARGB(255, 11, 2, 45),
+                  brightness: Brightness.dark,
+                  error: Colors.white,
+                  onBackground: Colors.white,
+                  onError: Colors.white,
+                  onPrimary: Colors.white,
+                  onSecondary: Colors.white,
+                  onSurface: Colors.white,
+                  surface: Colors.white,
+                ),
+                elevatedButtonTheme: ElevatedButtonThemeData(
+                  style: ButtonStyle(
+                      textStyle: MaterialStateProperty.all(
+                          const TextStyle(color: Colors.white)),
+                      backgroundColor: MaterialStateProperty.all(
+                          const Color.fromARGB(255, 77, 236, 200))),
+                ),
+                appBarTheme: const AppBarTheme(
+                    backgroundColor: Color.fromARGB(255, 11, 2, 45)),
+                bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                  backgroundColor: Color.fromARGB(255, 11, 2, 45),
+                  unselectedItemColor: Colors.white,
+                  selectedItemColor: Color.fromARGB(255, 77, 236, 200),
+                ),
+                textButtonTheme: TextButtonThemeData(
+                  style: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all(Colors.white)),
+                ),
+              )),
         ));
   }
 }

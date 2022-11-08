@@ -69,7 +69,7 @@ class _FeedTileState extends State<FeedTile> {
         color: Colors.green,
       ));
     }
-    if (widget.imageList == null) {
+    if (widget.imageList!.isEmpty) {
       imageSliders = imgList
           .map(
             (item) => Container(
@@ -122,53 +122,62 @@ class _FeedTileState extends State<FeedTile> {
     return Container(
         margin: EdgeInsets.all(deviceWidth(context) * 0.02),
         child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+            borderRadius: const BorderRadius.all(Radius.circular(15.0)),
             child: Container(
-                //color: Colors.amber,
+                color: Color.fromARGB(50, 255, 255, 255),
                 child: Column(
-              children: [
-                Padding(
-                    padding:
-                        EdgeInsets.only(bottom: deviceWidth(context) * 0.05)),
-                _name(),
-                Padding(
-                    padding:
-                        EdgeInsets.only(bottom: deviceWidth(context) * 0.05)),
-                Text(widget.workout.description),
-                Padding(
-                    padding:
-                        EdgeInsets.only(bottom: deviceWidth(context) * 0.05)),
-                _carousel(),
-                _status(),
-                Padding(
-                    padding:
-                        EdgeInsets.only(bottom: deviceWidth(context) * 0.05)),
-                const Divider(
-                  height: 30,
-                  thickness: 3.0,
-                )
-              ],
-            ))));
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.only(
+                            bottom: deviceWidth(context) * 0.05)),
+                    _name(),
+                    Padding(
+                        padding: EdgeInsets.only(
+                            bottom: deviceWidth(context) * 0.05)),
+                    Text(widget.workout.description),
+                    Padding(
+                        padding: EdgeInsets.only(
+                            bottom: deviceWidth(context) * 0.05)),
+                    _carousel(),
+                    _status(),
+                    Padding(
+                        padding: EdgeInsets.only(
+                            bottom: deviceWidth(context) * 0.05)),
+                    // Divider(
+                    //   color: Theme.of(context).colorScheme.primary,
+                    //   height: 30,
+                    //   thickness: 5.0,
+                    // )
+                  ],
+                ))));
   }
 
   Widget _name() {
-    return Row(
-      children: [
-        Padding(padding: EdgeInsets.only(left: deviceWidth(context) * 0.05)),
-        Expanded(
-            child: Text(
-          "${widget.userName}'s Workout",
-          textAlign: TextAlign.left,
-        )),
-        Expanded(
-            //width: deviceWidth(context) * 0.4,
-            child: Text(
-          "${widget.workout.date.split('T')[0]} \n ${widget.workout.date.split('T')[1].split('.')[0]}",
-          textAlign: TextAlign.right,
-        )),
-        Padding(padding: EdgeInsets.only(right: deviceWidth(context) * 0.05)),
-      ],
-    );
+    return Align(
+        alignment: Alignment.topLeft,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+                padding: EdgeInsets.only(
+                    left: deviceWidth(context) * 0.05,
+                    bottom: deviceWidth(context) * 0.01),
+                child: Text(
+                  "${widget.userName}'s workout",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                )),
+            Padding(
+                padding: EdgeInsets.only(left: deviceWidth(context) * 0.05),
+                child: Text(
+                  "${widget.workout.date.split('T')[0]} ${widget.workout.date.split('T')[1].split('.')[0]}",
+                  textAlign: TextAlign.left,
+                )),
+          ],
+        ));
   }
 
   Widget _status() {
@@ -233,7 +242,7 @@ class _FeedTileState extends State<FeedTile> {
                     fontSize: 40,
                   ),
                 ))),
-        const FittedBox(fit: BoxFit.scaleDown, child: Text("DurationDuration")),
+        const FittedBox(fit: BoxFit.scaleDown, child: Text("Duration")),
       ],
     );
   }

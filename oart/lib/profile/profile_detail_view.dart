@@ -7,14 +7,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:oart/data_types/all.dart' as data;
 import 'package:oart/feed/feed_navigator_cubit.dart';
+import 'package:oart/profile/profile_navigator_cubit.dart';
 
-class FeedDetailView extends StatefulWidget {
-  const FeedDetailView({super.key});
+class ProfileDetailView extends StatefulWidget {
+  const ProfileDetailView({super.key});
   @override
-  State<FeedDetailView> createState() => _FeedDetailView();
+  State<ProfileDetailView> createState() => _ProfileDetailView();
 }
 
-class _FeedDetailView extends State<FeedDetailView> {
+class _ProfileDetailView extends State<ProfileDetailView> {
   double deviceHeight(BuildContext context) =>
       MediaQuery.of(context).size.height;
   double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
@@ -47,9 +48,9 @@ class _FeedDetailView extends State<FeedDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    final workout = context.read<FeedNavigatorCubit>().workout;
-    final imageList = context.read<FeedNavigatorCubit>().imageList;
-    final coordList = context.read<FeedNavigatorCubit>().coordList;
+    final workout = context.read<ProfileNavigatorCubit>().workout;
+    final imageList = context.read<ProfileNavigatorCubit>().imageList;
+    final coordList = context.read<ProfileNavigatorCubit>().coordList;
     imageSliders = imageList.isNotEmpty
         ? imageList
             .map((item) => Container(
