@@ -15,7 +15,7 @@ class MapRepository {
     NetworkInfo net = NetworkInfo();
     if (await net.getWifiIP() == null) {
       int? tempWorkoutId = await db.getWorkoutCount();
-      tempWorkoutId = -(tempWorkoutId!);
+      tempWorkoutId = -(tempWorkoutId! + 1);
 
       Workout serviceWorkout = Workout(
           tempWorkoutId,
