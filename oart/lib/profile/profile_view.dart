@@ -43,49 +43,50 @@ class _ProfileViewState extends State<ProfileView> {
   Widget _profileView() {
     return BlocBuilder<FeedBloc, FeedState>(builder: (context, state) {
       return Container(
-          child: (state is FeedLoadSucessState)
-              ? RefreshIndicator(
-                  onRefresh: refresh,
-                  child: ListView(children: [
-                    Padding(
-                        padding: EdgeInsets.only(
-                            left: deviceWidth(context) * 0.05,
-                            top: deviceHeight(context) * 0.02,
-                            bottom: deviceHeight(context) * 0.005),
-                        child: const Text(
-                          "Statistics",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        )),
-                    _total(_getWorkouts(state)),
-                    _chart(_getWorkouts(state)
-                        .getRange(
-                            0,
-                            _getWorkouts(state).length < 7
-                                ? _getWorkouts(state).length
-                                : 7)
-                        .toList()),
-                    _chartBar(_getWorkouts(state)
-                        .getRange(
-                            0,
-                            _getWorkouts(state).length < 7
-                                ? _getWorkouts(state).length
-                                : 7)
-                        .toList()),
-                    Padding(
-                        padding: EdgeInsets.only(
-                            left: deviceWidth(context) * 0.05,
-                            top: deviceHeight(context) * 0.02,
-                            bottom: deviceHeight(context) * 0.005),
-                        child: const Text(
-                          "Personal records",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        )),
-                    _record(_getWorkouts(state), state),
-                  ]),
-                )
-              : Container());
+          child:
+              (state is FeedLoadSucessState && _getWorkouts(state).isNotEmpty)
+                  ? RefreshIndicator(
+                      onRefresh: refresh,
+                      child: ListView(children: [
+                        Padding(
+                            padding: EdgeInsets.only(
+                                left: deviceWidth(context) * 0.05,
+                                top: deviceHeight(context) * 0.02,
+                                bottom: deviceHeight(context) * 0.005),
+                            child: const Text(
+                              "Statistics",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            )),
+                        _total(_getWorkouts(state)),
+                        _chart(_getWorkouts(state)
+                            .getRange(
+                                0,
+                                _getWorkouts(state).length < 7
+                                    ? _getWorkouts(state).length
+                                    : 7)
+                            .toList()),
+                        _chartBar(_getWorkouts(state)
+                            .getRange(
+                                0,
+                                _getWorkouts(state).length < 7
+                                    ? _getWorkouts(state).length
+                                    : 7)
+                            .toList()),
+                        Padding(
+                            padding: EdgeInsets.only(
+                                left: deviceWidth(context) * 0.05,
+                                top: deviceHeight(context) * 0.02,
+                                bottom: deviceHeight(context) * 0.005),
+                            child: const Text(
+                              "Personal records",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            )),
+                        _record(_getWorkouts(state), state),
+                      ]),
+                    )
+                  : const Center(child: CircularProgressIndicator()));
     });
   }
 
