@@ -1,9 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oart/feed/bloc/feed_bloc.dart';
-import 'package:oart/feed/feed_detail_view.dart';
 import 'package:oart/feed/feed_navigator_cubit.dart';
 import 'package:oart/feed/feed_tile.dart';
 
@@ -56,7 +53,6 @@ class _FeedViewState extends State<FeedView> {
                           itemBuilder: ((context, index) {
                             return GestureDetector(
                                 onTap: () {
-                                  print("index $index");
                                   BlocProvider.of<FeedNavigatorCubit>(context)
                                       .showDetail(
                                     state.workoutsList[index],

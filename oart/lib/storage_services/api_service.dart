@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:network_info_plus/network_info_plus.dart';
-
 import '../data_types/all.dart';
 import 'package:http/http.dart' as http;
 

@@ -17,8 +17,6 @@ class MapRepository {
       int? tempWorkoutId = await db.getWorkoutCount();
       tempWorkoutId = -(tempWorkoutId!);
 
-      print('Temporary identifier = $tempWorkoutId');
-
       Workout serviceWorkout = Workout(
           tempWorkoutId,
           workout.userId!,
@@ -32,7 +30,6 @@ class MapRepository {
       await db.createWorkout(serviceWorkout);
 
       workout.images ??= <String>[];
-      print('Images length = ${workout.images!.length}');
       for (int i = 0; i < workout.images!.length; i++) {
         await db.createImage(Image.fromMapLocal({
           'id': -1,
@@ -44,7 +41,6 @@ class MapRepository {
       }
 
       workout.coords ??= <LatLng>[];
-      print('Coordinates length = ${workout.coords!.length}');
       for (int i = 0; i < workout.coords!.length; i++) {
         await db.createCoordinates(Coordinate.fromMapLocal({
           'id': -1,
@@ -131,15 +127,14 @@ class MapRepository {
       Workout dbWorkout = Workout.fromMapAPI(registered.toMapLocal());
       await db.createWorkout(dbWorkout);
 
-      List<Coordinate> APIcoords =
+      List<Coordinate> apiCoords =
           await api.getWorkoutCoordinates(registered.id);
-      for (Coordinate coord in APIcoords) {
+      for (Coordinate coord in apiCoords) {
         await db.createCoordinates(coord);
       }
 
-      List<Image> APIimages = await api.getWorkoutImages(registered.id);
-      for (Image image in APIimages) {
-        print(image.name);
+      List<Image> apiImages = await api.getWorkoutImages(registered.id);
+      for (Image image in apiImages) {
         await db.createImage(image);
       }
 

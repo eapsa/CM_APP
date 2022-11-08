@@ -23,6 +23,7 @@ class _SettingsViewState extends State<SettingsView> {
       MediaQuery.of(context).size.height;
   double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
 
+  @override
   void initState() {
     super.initState();
     getStoredValue();

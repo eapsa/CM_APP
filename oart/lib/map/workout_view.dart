@@ -116,7 +116,6 @@ class WorkoutView extends StatelessWidget {
   }
 
   Widget _distance(Workout workout) {
-    print(workout.time);
     return Column(
       children: [
         Padding(

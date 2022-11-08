@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:oart/data_types/all.dart' as data;
-import 'package:oart/feed/feed_navigator_cubit.dart';
 import 'package:oart/profile/profile_navigator_cubit.dart';
 
 class ProfileDetailView extends StatefulWidget {
@@ -54,26 +53,23 @@ class _ProfileDetailView extends State<ProfileDetailView> {
     imageSliders = imageList.isNotEmpty
         ? imageList
             .map((item) => Container(
-                  child: Container(
-                    margin: const EdgeInsets.all(5.0),
-                    child: ClipRRect(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5.0)),
-                        child: Stack(
-                          children: <Widget>[
-                            Image.memory(
-                              base64.decode(item.image),
-                              fit: BoxFit.cover,
-                              width: 1000.0,
-                            ),
-                          ],
-                        )),
-                  ),
+                  margin: const EdgeInsets.all(5.0),
+                  child: ClipRRect(
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(5.0)),
+                      child: Stack(
+                        children: <Widget>[
+                          Image.memory(
+                            base64.decode(item.image),
+                            fit: BoxFit.cover,
+                            width: 1000.0,
+                          ),
+                        ],
+                      )),
                 ))
             .toList()
         : imgList
             .map((item) => Container(
-                    child: Container(
                   margin: const EdgeInsets.all(5.0),
                   child: ClipRRect(
                     borderRadius: const BorderRadius.all(Radius.circular(5.0)),
@@ -91,7 +87,7 @@ class _ProfileDetailView extends State<ProfileDetailView> {
                           ],
                         )),
                   ),
-                )))
+                ))
             .toList();
     for (data.Coordinate coord in coordList) {
       latLen.add(LatLng(coord.latitude, coord.longitude));
@@ -99,7 +95,7 @@ class _ProfileDetailView extends State<ProfileDetailView> {
 
     for (int i = 0; i < latLen.length; i++) {
       _polyline.add(Polyline(
-        polylineId: PolylineId('1'),
+        polylineId: const PolylineId('1'),
         points: latLen,
         color: Colors.red,
       ));
@@ -145,7 +141,7 @@ class _ProfileDetailView extends State<ProfileDetailView> {
             child: Text(
           "${workout.date.split('T')[0]} ${workout.date.split('T')[1].split('.')[0]}",
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
         )),
@@ -253,8 +249,7 @@ class _ProfileDetailView extends State<ProfileDetailView> {
   }
 
   Widget _carousel(List<Widget> imageSliders) {
-    return Container(
-        child: CarouselSlider(
+    return CarouselSlider(
       options: CarouselOptions(
         height: deviceHeight(context) * 0.4,
         aspectRatio: 2.0,
@@ -262,7 +257,7 @@ class _ProfileDetailView extends State<ProfileDetailView> {
         pageViewKey: const PageStorageKey<String>('carousel_slider'),
       ),
       items: imageSliders,
-    ));
+    );
   }
 }
 

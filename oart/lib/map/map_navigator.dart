@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:oart/loading_view.dart';
 import 'package:oart/map/map_navigator_cubit.dart';
 import 'package:oart/map/map_view.dart';
 import 'package:oart/map/settings_view.dart';
@@ -15,9 +14,9 @@ class MapNavigator extends StatelessWidget {
         builder: (context, state) {
       return Navigator(
         pages: [
-          MaterialPage(child: MapView()),
+          const MaterialPage(child: MapView()),
           if (state == MapNavigatorState.photo)
-            MaterialPage(child: SettingsView()),
+            const MaterialPage(child: SettingsView()),
           if (state == MapNavigatorState.workout)
             MaterialPage(child: WorkoutView()),
         ],

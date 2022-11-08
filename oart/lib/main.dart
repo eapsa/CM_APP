@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
           ],
           child: MaterialApp(
               debugShowCheckedModeBanner: false,
-              home: AppNavigator(),
+              home: const AppNavigator(),
               theme: ThemeData(
                 colorScheme: const ColorScheme(
                   primary: Color.fromARGB(255, 11, 2, 45),

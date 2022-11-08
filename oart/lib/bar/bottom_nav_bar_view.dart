@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oart/bar/bottom_nav_bar_cubit.dart';
 import 'package:oart/feed/feed_navigator.dart';
-import 'package:oart/feed/feed_view.dart';
-import 'package:oart/loading_view.dart';
 import 'package:oart/map/map_navigator.dart';
-import 'package:oart/map/map_view.dart';
 import 'package:oart/profile/profile_navigator.dart';
-import 'package:oart/profile/profile_view.dart';
-import 'package:oart/session_view.dart';
 
 class BottomNavBarView extends StatelessWidget {
   const BottomNavBarView({super.key});
@@ -21,7 +14,7 @@ class BottomNavBarView extends StatelessWidget {
       return Scaffold(
         body: IndexedStack(
           index: state,
-          children: [
+          children: const [
             MapNavigator(),
             FeedNavigator(),
             ProfileNavigator(),

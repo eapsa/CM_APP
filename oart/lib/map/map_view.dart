@@ -10,7 +10,6 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
-import 'package:oart/bar/bottom_nav_bar_cubit.dart';
 import 'package:oart/map/bloc/map_bloc.dart';
 import 'package:oart/map/map_navigator_cubit.dart';
 import 'package:oart/map/shared_preferences.dart';
@@ -117,10 +116,8 @@ class _MapViewState extends State<MapView> {
     return BlocListener<SessionCubit, SessionState>(
         listener: (context, state) {
           if (state is Unauthenticated) {
-            print("BOAS123 ${state.toString()}");
             locationSubscription.cancel();
           }
-          ;
         },
         child: Scaffold(
           appBar: _appBar(),
@@ -403,11 +400,8 @@ class _MapViewState extends State<MapView> {
       } else {
         workout.images?.add(base64encode);
       }
-      // setState(() {
-      //   this.image = imageTemp;
-      // });
-    } on PlatformException catch (e) {
-      print('Failed to select image: $e');
+    } on PlatformException {
+      return;
     }
   }
 

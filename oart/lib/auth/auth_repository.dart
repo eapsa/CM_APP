@@ -95,7 +95,6 @@ class AuthRepository {
           await api.postWorkout(workouts[i].toMapAPI(), images, coords);
 
       await db.updateWorkout(workouts[i].id, workout.id);
-      print('Boas updated workout');
     }
   }
 }

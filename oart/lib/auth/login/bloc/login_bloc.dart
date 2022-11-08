@@ -13,13 +13,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthCubit authCubit;
 
   LoginBloc(this.authRepo, this.authCubit) : super(const LoginState()) {
-    print("esdfada");
     on<LoginEmailChanged>((event, emit) async {
-      print("user");
       emit(state.copyWith(email: event.email));
     });
     on<LoginPasswordChanged>((event, emit) async {
-      print("password");
       emit(state.copyWith(password: event.password));
     });
     on<LoginSubmitted>((event, emit) async {

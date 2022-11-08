@@ -13,17 +13,13 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   final AuthCubit authCubit;
 
   SignUpBloc(this.authRepo, this.authCubit) : super(const SignUpState()) {
-    print("esdfada");
     on<SignUpUsernameChanged>((event, emit) async {
-      print("user");
       emit(state.copyWith(username: event.username));
     });
     on<SignUpEmailChanged>((event, emit) async {
-      print("email");
       emit(state.copyWith(email: event.email));
     });
     on<SignUpPasswordChanged>((event, emit) async {
-      print("password");
       emit(state.copyWith(password: event.password));
     });
     on<SignUpSubmitted>((event, emit) async {

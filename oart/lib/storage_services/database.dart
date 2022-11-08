@@ -68,7 +68,6 @@ class DatabaseService {
       final Database db = await getDB();
       await db.insert('User', user.toMap());
     } catch (e) {
-      print(e);
       return;
     }
   }
@@ -80,7 +79,6 @@ class DatabaseService {
 
       return User.fromMapLocal(maps[0]);
     } catch (ex) {
-      print(ex);
       return null;
     }
   }
@@ -90,7 +88,6 @@ class DatabaseService {
       final Database db = await getDB();
       await db.insert('Workout', workout.toMapLocal());
     } catch (e) {
-      print(e);
       return;
     }
   }
@@ -106,7 +103,6 @@ class DatabaseService {
       await db.update('Coordinates', {'workout_id': newId},
           where: 'workout_id = $workoutId');
     } catch (e) {
-      print(e);
       return;
     }
   }
@@ -123,7 +119,6 @@ class DatabaseService {
         },
       );
     } catch (ex) {
-      print(ex);
       return <Workout>[];
     }
   }
@@ -141,7 +136,6 @@ class DatabaseService {
         },
       );
     } catch (ex) {
-      print(ex);
       return <Workout>[];
     }
   }
@@ -157,7 +151,6 @@ class DatabaseService {
         'longitude': coords.longitude
       });
     } catch (e) {
-      print(e);
       return;
     }
   }
@@ -176,7 +169,6 @@ class DatabaseService {
         },
       );
     } catch (ex) {
-      print(ex);
       return <Coordinate>[];
     }
   }
@@ -186,7 +178,6 @@ class DatabaseService {
       final Database db = await getDB();
       await db.insert('Friends', friend.toMap());
     } catch (e) {
-      print(e);
       return;
     }
   }
@@ -204,7 +195,6 @@ class DatabaseService {
         },
       );
     } catch (ex) {
-      print(ex);
       return <Friend>[];
     }
   }
@@ -214,7 +204,6 @@ class DatabaseService {
       final Database db = await getDB();
       Image smallImage;
 
-      String base64 = image.image;
       int? imageId = await getImagesCount();
 
       for (int i = 0; i < 9; i++) {
@@ -236,7 +225,6 @@ class DatabaseService {
       });
       await db.insert('Images', smallImage.toMap());
     } catch (e) {
-      print(e);
       return;
     }
   }
@@ -264,7 +252,6 @@ class DatabaseService {
       }
       return images;
     } catch (ex) {
-      print(ex);
       return <Image>[];
     }
   }
@@ -278,7 +265,6 @@ class DatabaseService {
       await db.execute('DELETE FROM Workout;');
       await db.execute('DELETE FROM User;');
     } catch (e) {
-      print(e);
       return;
     }
   }
@@ -289,9 +275,8 @@ class DatabaseService {
       return Sqflite.firstIntValue(
           await db.rawQuery('SELECT COUNT(*) FROM Workout;'));
     } catch (e) {
-      print(e);
+      return null;
     }
-    return null;
   }
 
   Future<int?> getImagesCount() async {
@@ -300,9 +285,8 @@ class DatabaseService {
       return Sqflite.firstIntValue(
           await db.rawQuery('SELECT COUNT(*) FROM Images;'));
     } catch (e) {
-      print(e);
+      return null;
     }
-    return null;
   }
 
   Future<int?> getCoordinatesCount() async {
@@ -311,8 +295,7 @@ class DatabaseService {
       return Sqflite.firstIntValue(
           await db.rawQuery('SELECT COUNT(*) FROM Coordinates;'));
     } catch (e) {
-      print(e);
+      return null;
     }
-    return null;
   }
 }

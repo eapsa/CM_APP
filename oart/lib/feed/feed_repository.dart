@@ -22,16 +22,13 @@ class FeedRepository {
       for (Workout workout in apiWorkouts) {
         a = true;
         for (Workout dbWorkout in dbWorkouts) {
-          print('Boas ${dbWorkout.id} - ${workout.id}');
           if (dbWorkout.id == workout.id) {
-            print('Boas API');
             a = false;
             break;
           }
         }
 
         if (dbWorkouts.isEmpty || a) {
-          print('Boas');
           await db.createWorkout(workout);
           dbWorkouts.add(workout);
         }
@@ -126,15 +123,10 @@ class FeedRepository {
     List<Friend> friends = await db.getFriends();
 
     for (int id in userList) {
-      print('Boas set');
       if (user!.id == id) userNames[id] = user.name;
       for (Friend friend in friends) {
-        print('Boas Friend ${friend.toString()}');
         if (friend.id == id) userNames[id] = friend.name;
       }
-    }
-    for (int i = 0; i < userList.length; i++) {
-      print('Boas FeedRepository ${userNames[userList.elementAt(0)]}');
     }
     return userNames;
   }
@@ -162,7 +154,6 @@ class FeedRepository {
           await api.postWorkout(workouts[i].toMapAPI(), images, coords);
 
       await db.updateWorkout(workouts[i].id, workout.id);
-      print('Boas updated workout');
     }
   }
 }

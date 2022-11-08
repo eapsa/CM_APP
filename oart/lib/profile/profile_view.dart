@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oart/feed/bloc/feed_bloc.dart';
-import 'package:oart/feed/feed_detail_view.dart';
-import 'package:oart/feed/feed_navigator_cubit.dart';
 import 'package:oart/profile/profile_navigator_cubit.dart';
 import 'package:oart/session_cubic.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -128,7 +126,7 @@ class _ProfileViewState extends State<ProfileView> {
             child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                 child: Container(
-                    color: Color.fromARGB(50, 255, 255, 255),
+                    color: const Color.fromARGB(50, 255, 255, 255),
                     child: Column(children: [
                       Padding(
                           padding: EdgeInsets.symmetric(
@@ -137,7 +135,7 @@ class _ProfileViewState extends State<ProfileView> {
                               fit: BoxFit.scaleDown,
                               child: Text(
                                 title,
-                                style: TextStyle(fontSize: 20),
+                                style: const TextStyle(fontSize: 20),
                               ))),
                       Row(
                         children: [
@@ -204,7 +202,7 @@ class _ProfileViewState extends State<ProfileView> {
         child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(15.0)),
             child: Container(
-              color: Color.fromARGB(50, 255, 255, 255),
+              color: const Color.fromARGB(50, 255, 255, 255),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -264,7 +262,7 @@ class _ProfileViewState extends State<ProfileView> {
         child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(15.0)),
             child: Container(
-                color: Color.fromARGB(50, 255, 255, 255),
+                color: const Color.fromARGB(50, 255, 255, 255),
                 child: SfCartesianChart(
                     palette: [Theme.of(context).colorScheme.secondary],
                     primaryXAxis: CategoryAxis(labelRotation: 50),
@@ -293,7 +291,7 @@ class _ProfileViewState extends State<ProfileView> {
         child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(15.0)),
             child: Container(
-                color: Color.fromARGB(50, 255, 255, 255),
+                color: const Color.fromARGB(50, 255, 255, 255),
                 child: SfCartesianChart(
                     palette: [Theme.of(context).colorScheme.secondary],
                     primaryXAxis: CategoryAxis(labelRotation: 50),

@@ -25,8 +25,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       try {
         await mapRepo.saveWorkout(event.workout);
         emit(MapInitialState());
-      } on Exception catch (e) {
-        print(e);
+      } on Exception {
+        emit(MapInitialState());
       }
     });
   }

@@ -24,7 +24,6 @@ class SignUpState {
     String? password,
     FormSubmissionStatus? formStatus,
   }) {
-    print(username.toString());
     return SignUpState(
         username: username ?? this.username,
         email: email ?? this.email,

@@ -1,11 +1,8 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:oart/data_types/all.dart' as data;
-import 'package:oart/feed/feed_repository.dart';
 
 class FeedTile extends StatefulWidget {
   FeedTile({
@@ -28,47 +25,11 @@ class _FeedTileState extends State<FeedTile> {
       MediaQuery.of(context).size.height;
   double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
   List<Widget> imageSliders = [];
-  // created controller to display Google Maps
-  late GoogleMapController _controller;
-  //on below line we have set the camera position
-  static final CameraPosition _kGoogle = const CameraPosition(
-    target: LatLng(40.636839, -8.657503),
-    zoom: 14,
-  );
-
-  final Set<Marker> _markers = {};
-  final Set<Polyline> _polyline = {};
-
-  // list of locations to display polylines
-  List<LatLng> latLen = [
-    LatLng(40.636839, -8.657503),
-    LatLng(40.681987, -8.600407),
-  ];
 
   @override
   initState() {
-    // TODO: implement initState
     super.initState();
-    // declared for loop for various locations
-    for (int i = 0; i < latLen.length; i++) {
-      _markers.add(
-          // added markers
-          Marker(
-        markerId: MarkerId(i.toString()),
-        position: latLen[i],
-        infoWindow: InfoWindow(
-          title: 'HOTEL',
-          snippet: '5 Star Hotel',
-        ),
-        icon: BitmapDescriptor.defaultMarker,
-      ));
-      setState(() {});
-      _polyline.add(Polyline(
-        polylineId: PolylineId('1'),
-        points: latLen,
-        color: Colors.green,
-      ));
-    }
+
     if (widget.imageList!.isEmpty) {
       imageSliders = imgList
           .map(
@@ -95,22 +56,19 @@ class _FeedTileState extends State<FeedTile> {
     } else {
       imageSliders = widget.imageList!
           .map((item) => Container(
-                child: Container(
-                  margin: const EdgeInsets.all(5.0),
-                  child: ClipRRect(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(5.0)),
-                      child: Stack(
-                        children: <Widget>[
-                          Image.memory(
-                            base64.decode(item.image),
-                            fit: BoxFit.cover,
-                            width: 1000.0,
-                            // color: Colors.amber,
-                          ),
-                        ],
-                      )),
-                ),
+                margin: const EdgeInsets.all(5.0),
+                child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                    child: Stack(
+                      children: <Widget>[
+                        Image.memory(
+                          base64.decode(item.image),
+                          fit: BoxFit.cover,
+                          width: 1000.0,
+                          // color: Colors.amber,
+                        ),
+                      ],
+                    )),
               ))
           .toList();
     }
@@ -124,7 +82,7 @@ class _FeedTileState extends State<FeedTile> {
         child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(15.0)),
             child: Container(
-                color: Color.fromARGB(50, 255, 255, 255),
+                color: const Color.fromARGB(50, 255, 255, 255),
                 child: Column(
                   children: [
                     Padding(
@@ -165,7 +123,7 @@ class _FeedTileState extends State<FeedTile> {
                 child: Text(
                   "${widget.userName}'s workout",
                   textAlign: TextAlign.left,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),
@@ -248,8 +206,7 @@ class _FeedTileState extends State<FeedTile> {
   }
 
   Widget _carousel() {
-    return Container(
-        child: CarouselSlider(
+    return CarouselSlider(
       options: CarouselOptions(
         height: deviceHeight(context) * 0.4,
         aspectRatio: 2.0,
@@ -257,30 +214,6 @@ class _FeedTileState extends State<FeedTile> {
         pageViewKey: const PageStorageKey<String>('carousel_slider'),
       ),
       items: imageSliders,
-    ));
-  }
-
-  Widget _map(data.Workout workout) {
-    return Container(
-      child: Container(
-        margin: const EdgeInsets.all(5.0),
-        child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            child: Stack(
-              children: <Widget>[
-                GoogleMap(
-                  initialCameraPosition: _kGoogle,
-                  zoomGesturesEnabled: false,
-                  mapType: MapType.normal,
-                  markers: _markers,
-                  polylines: _polyline,
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller = controller;
-                  },
-                ),
-              ],
-            )),
-      ),
     );
   }
 }

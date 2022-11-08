@@ -20,7 +20,6 @@ class LoginState {
     String? password,
     FormSubmissionStatus? formStatus,
   }) {
-    print(email.toString());
     return LoginState(
         email: email ?? this.email,
         password: password ?? this.password,
